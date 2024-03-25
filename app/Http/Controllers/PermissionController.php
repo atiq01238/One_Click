@@ -7,12 +7,6 @@ use Spatie\Permission\Models\Permission;
 
 class PermissionController extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->middleware('permission:delete role', ['only' => ['destroy']]);
-    //     $this->middleware('permission:update role', ['only' => ['update', 'edit']]);
-
-    // }
     /**
      * Display a listing of the resource.
      */
@@ -39,24 +33,19 @@ class PermissionController extends Controller
 {
     // dd($request->all());
 
-    //Validate the incoming request data
     $request->validate([
         'name' => 'required|string|unique:permissions,name'
     ]);
 
     try {
-        // Attempt to create a new permission record
         Permission::create([
             'name' => $request->name
         ]);
 
-        // Redirect back to permissions index with success message
         return redirect('permissions')->with('success', 'Permission created successfully');
     } catch (\Exception $e) {
-        // Log the error for further investigation
         \Log::error('Error creating permission: ' . $e->getMessage());
 
-        // Redirect back to the form with an error message
         return redirect()->back()->with('error', 'An error occurred while creating the permission. Please try again.');
     }
 }
@@ -91,21 +80,16 @@ class PermissionController extends Controller
         ]);
 
         try {
-            // Find the permission by its ID
             $permission = Permission::findOrFail($id);
 
-            // Update the permission record
             $permission->update([
                 'name' => $request->name
             ]);
 
-            // Redirect back to permissions index with success message
             return redirect('permissions')->with('success', 'Permission updated successfully');
         } catch (\Exception $e) {
-            // Log the error for further investigation
             \Log::error('Error updating permission: ' . $e->getMessage());
 
-            // Redirect back to the form with an error message
             return redirect()->back()->with('error', 'An error occurred while updating the permission. Please try again.');
         }
     }

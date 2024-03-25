@@ -8,12 +8,6 @@ use Spatie\Permission\Models\Permission;
 
 class RoleController extends Controller
 {
-    //  public function __construct()
-    // {
-    //     $this->middleware('permission:delete role', ['only' => ['destroy']]);
-    //     $this->middleware('permission:update role', ['only' => ['update', 'edit']]);
-
-    // }
     /**
      * Display a listing of the resource.
      */
@@ -44,18 +38,14 @@ class RoleController extends Controller
         // dd($request->all());
 
         try {
-            // Attempt to create a new permission record
             Role::create([
                 'name' => $request->name
             ]);
 
-            // Redirect back to role index with success message
             return redirect('roles')->with('success', 'Role created successfully');
         } catch (\Exception $e) {
-            // Log the error for further investigation
             \Log::error('Error creating role: ' . $e->getMessage());
 
-            // Redirect back to the form with an error message
             return redirect()->back()->with('error', 'An error occurred while creating the role. Please try again.');
         }
     }
@@ -90,21 +80,15 @@ class RoleController extends Controller
         ]);
 
         try {
-            // Find the permission by its ID
             $role = Role::findOrFail($id);
-
-            // Update the role record
             $role->update([
                 'name' => $request->name
             ]);
 
-            // Redirect back to roles index with success message
             return redirect('roles')->with('success', 'Role updated successfully');
         } catch (\Exception $e) {
-            // Log the error for further investigation
             \Log::error('Error updating role: ' . $e->getMessage());
 
-            // Redirect back to the form with an error message
             return redirect()->back()->with('error', 'An error occurred while updating the role. Please try again.');
         }
     }

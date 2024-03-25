@@ -54,7 +54,6 @@ class AuthController extends Controller
         'password' => Hash::make($request->input('password')),
     ]);
 
-    // Flash a success message to the session
     return redirect('login')->with('success', 'Registration successful. You can now log in.');
 }
 

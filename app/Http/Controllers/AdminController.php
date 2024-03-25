@@ -15,13 +15,10 @@ class AdminController extends Controller
      */
     public function index()
     {
-        // Fetch users with assigned roles
         $users = User::whereHas('roles')->get();
 
-        // Fetch all roles
         $roles = Role::pluck('name', 'id');
 
-        // Pass users and roles to the view
         return View::make('admin.index', compact('users', 'roles'));
     }
     /**
@@ -71,7 +68,6 @@ class AdminController extends Controller
     {
         $user = User::findOrFail($userId);
 
-        // Remove all roles assigned to the user
         $user->roles()->detach();
 
         return redirect()->back()->with('success', 'Roles have been removed from the user successfully.');

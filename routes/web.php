@@ -24,7 +24,7 @@ Route::get('/assign-role', [UserController::class, 'assignRoleForm'])->name('use
 Route::post('/assign-role', [UserController::class, 'assignRole'])->name('user.assignRole');
 
 
-//Users Routes
+//Admin Routes
 Route::resource('admins', AdminController::class);
 Route::delete('/admins/{id}', 'AdminController@destroy')->name('admins.destroy');
 
