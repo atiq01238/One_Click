@@ -8,6 +8,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\InviteController;
 
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -19,13 +20,17 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout']);
 
 //Users Routes
-Route::resource('users', UserController::class);
-Route::get('/assign-role', [UserController::class, 'assignRoleForm'])->name('user.assignRoleForm');
-Route::post('/assign-role', [UserController::class, 'assignRole'])->name('user.assignRole');
 
+Route::group(['middleware' => ['auth', 'fetchUserRoles']], function () {
+
+    Route::resource('users', UserController::class);
+    Route::get('/assign-role', [UserController::class, 'assignRoleForm'])->name('user.assignRoleForm');
+    Route::post('/assign-role', [UserController::class, 'assignRole'])->name('user.assignRole');
+    Route::resource('admins', AdminController::class);
+
+});
 
 //Admin Routes
-Route::resource('admins', AdminController::class);
 Route::delete('/admins/{id}', 'AdminController@destroy')->name('admins.destroy');
 
 //Users Routes

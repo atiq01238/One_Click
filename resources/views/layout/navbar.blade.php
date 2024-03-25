@@ -122,7 +122,7 @@
                 </a>
                 <a class="dropdown-item d-flex align-items-center" href="#">
                     <div class="dropdown-list-image mr-3">
-                        <img class="rounded-circle" src="img/undraw_profile_2.svg" alt="...">
+                        <img class="rounded-circle" src="{{ asset('img/undraw_profile_2.svg') }}" alt="...">
                         <div class="status-indicator"></div>
                     </div>
                     <div>
@@ -133,7 +133,7 @@
                 </a>
                 <a class="dropdown-item d-flex align-items-center" href="#">
                     <div class="dropdown-list-image mr-3">
-                        <img class="rounded-circle" src="img/undraw_profile_3.svg" alt="...">
+                        <img class="rounded-circle" src="{{ asset('img/undraw_profile_3.svg') }}" alt="...">
                         <div class="status-indicator bg-warning"></div>
                     </div>
                     <div>
@@ -144,7 +144,7 @@
                 </a>
                 <a class="dropdown-item d-flex align-items-center" href="#">
                     <div class="dropdown-list-image mr-3">
-                        <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
+                        <img class="rounded-circle" src="{{ asset('https://source.unsplash.com/Mv9hjnEUHR4/60x60') }}"
                             alt="...">
                         <div class="status-indicator bg-success"></div>
                     </div>
@@ -164,9 +164,9 @@
         <li class="nav-item dropdown no-arrow">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                @if (isset($first_name) && isset($last_name))
-                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ $first_name }}
-                        {{ $last_name }}</span>
+                @if (Auth::check())
+                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->first_name }}
+                        {{ Auth::user()->last_name }}</span>
                 @else
                     <span class="mr-2 d-none d-lg-inline text-gray-600 small">Guest</span>
                 @endif

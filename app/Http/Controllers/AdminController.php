@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\View;
 
 class AdminController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:user.destroy')->only(['destroy']);
+    }
     /**
      * Display a listing of the resource.
      */

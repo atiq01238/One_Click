@@ -24,31 +24,32 @@
                         <div class="card-body">
                             <table class="table table-bordered ">
                                 <thead ">
-                                    <tr>
-                                        <th style="padding: 10px;">ID</th>
-                                        <th style="padding: 10px;">First Name</th>
-                                        <th style="padding: 10px;">Last Name</th>
-                                        <th style="padding: 10px;">Email</th>
-                                        <th style="padding: 10px;">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($users as $user)
                                         <tr>
-                                            <td style="padding: 10px;">{{ $user->id }}</td>
-                                            <td style="padding: 10px;">{{ $user->first_name }}</td>
-                                            <td style="padding: 10px;">{{ $user->last_name }}</td>
-                                            <td style="padding: 10px;">{{ $user->email }}</td>
-                                            <td style="padding: 10px;">
-                                                <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="d-inline">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this role?')">Delete</button>
-                                                </form>
-                                            </td>
+                                            <th style="padding: 10px;">ID</th>
+                                            <th style="padding: 10px;">First Name</th>
+                                            <th style="padding: 10px;">Last Name</th>
+                                            <th style="padding: 10px;">Email</th>
+                                            <th style="padding: 10px;">Action</th>
                                         </tr>
+                                    </thead>
+                                    <tbody>
+                                         @foreach ($users as $user)
+                                    <tr>
+                                        <td style="padding: 10px;">{{ $user->id }}</td>
+                                        <td style="padding: 10px;">{{ $user->first_name }}</td>
+                                        <td style="padding: 10px;">{{ $user->last_name }}</td>
+                                        <td style="padding: 10px;">{{ $user->email }}</td>
+                                        <td style="padding: 10px;">
+                                            <form action="{{ route('users.destroy', $user->id) }}" method="POST"
+                                                class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
                                     @endforeach
-                                </tbody>
+                                    </tbody>
                             </table>
                             <div class="center">{{ $users->links() }}</div>
                             <!-- Pagination Links -->

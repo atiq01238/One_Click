@@ -32,16 +32,16 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
+
         $request->validate([
-            'name' => 'required|string|unique:roles,name' // Change 'role' to 'roles'
+            'name' => 'required|string',
         ]);
         // dd($request->all());
-
         try {
             Role::create([
                 'name' => $request->name
             ]);
-
+            // dd($request->all());
             return redirect('roles')->with('success', 'Role created successfully');
         } catch (\Exception $e) {
             \Log::error('Error creating role: ' . $e->getMessage());

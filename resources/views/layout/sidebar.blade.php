@@ -34,7 +34,7 @@
     </div>
 
     <!-- Nav Item - User Management -->
-    @if(auth()->check() && auth()->user()->hasRole('Super-Admin'))
+    {{-- @if(auth()->check() && auth()->user()->hasRole('Super-Admin')) --}}
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse"
             data-target="#collapseEmployeesUserManagement" aria-expanded="false"
@@ -51,10 +51,10 @@
             </div>
         </div>
     </li>
-    @endif
+    {{-- @endif --}}
 
     <!-- Nav Item - Permissions and Access Control -->
-    @if(auth()->check() && (auth()->user()->hasRole('Super-Admin') ))
+    {{-- @if(auth()->check() && (auth()->user()->hasRole('Super-Admin') )) --}}
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePermissions"
             aria-expanded="false" aria-controls="collapsePermissions">
@@ -70,9 +70,9 @@
             </div>
         </div>
     </li>
-    @endif
+    {{-- @endif --}}
     <!-- Nav Item - Project Manager -->
-    @if(auth()->check() && (auth()->user()->hasRole('Super-Admin') || auth()->user()->hasRole('Project-Manager') ))
+    {{-- @if(auth()->check() && (auth()->user()->hasRole('Super-Admin') || auth()->user()->hasRole('Project-Manager') )) --}}
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProjectManager"
             aria-expanded="false" aria-controls="collapseProjectManager">
@@ -80,10 +80,10 @@
             <span>Project Manager</span>
         </a>
     </li>
-    @endif
+    {{-- @endif --}}
 
     <!-- Nav Item - User Task -->
-    @if(auth()->check() && auth()->user()->roles->isEmpty() || (auth()->user()->hasRole('Super-Admin') || auth()->user()->hasRole('Project-Manager') ))
+    {{-- @if(auth()->check() && auth()->user()->roles->isEmpty() || (auth()->user()->hasRole('Super-Admin') || auth()->user()->hasRole('Project-Manager') )) --}}
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUserTask"
             aria-expanded="false" aria-controls="collapseUserTask">
@@ -91,7 +91,7 @@
             <span>User Task</span>
         </a>
     </li>
-    @endif
+    {{-- @endif --}}
 
     <!-- Sidebar Toggle Button -->
     <div class="text-center d-none d-md-inline">

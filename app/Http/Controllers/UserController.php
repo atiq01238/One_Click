@@ -10,6 +10,10 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:users.destroy|users.invite')->only(['destroy', 'store']);
+    }
 
     public function index()
     {
