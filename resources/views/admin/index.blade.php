@@ -87,24 +87,21 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('user.assignRole') }}" method="POST">
+                <form method="POST" action="{{ route('user.assignRole') }}">
                     @csrf
                     <div class="form-group">
-                        <input type="email"
-                            class="form-control form-control-user @error('email') border border-danger @enderror"
-                            name="email" id="exampleInputEmail" placeholder="Email Address"
-                            value="{{ old('email') }}">
-                        @error('email')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                        <label for="">Roles</label>
-                        <select name="roles[]" class="form-control" multiple>
-                            @foreach ($roles as $roleId => $roleName)
-                                <option value="{{ $roleId }}">{{ $roleName }}</option>
+                        <label for="email">Email:</label>
+                        <input type="email" name="email" id="email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Role:</label>
+                        <select name="role" id="role" class="form-control" required>
+                            @foreach($roles as $role)
+                                <option value="{{ $role }}">{{ $role }}</option>
                             @endforeach
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary">Assign Role</button>
                 </form>
             </div>
         </div>

@@ -38,30 +38,41 @@ class UserController extends Controller
         return view('user.assign-role', compact('roles'));
     }
 
-     public function assignRole(Request $request)
-     {
-         // Validate the incoming request data
-         $request->validate([
-             'first_name' => 'required|string|max:255',
-             'last_name' => 'required|string|max:255',
-             'email' => 'required|email|max:255|exists:users,email',
-             'role' => 'required|string|exists:roles,name',
-         ]);
+    public function assignRole(Request $request)
+{
+    // Validate the incoming request data
+    $request->validate([
+        'email' => 'required|email|max:255|exists:users,email',
+        'role' => 'required|string|exists:roles,name',
+    ]);
 
-         // Find the user by first name, last name, and email
-         $user = User::where('first_name', $request->first_name)
-                     ->where('last_name', $request->last_name)
-                     ->where('email', $request->email)
-                     ->firstOrFail();
+    // Find the user by email
+    $user = User::where('email', $request->email)->first();
 
-         // Find the role by name
-         $role = Role::where('name', $request->role)->firstOrFail();
+    if (!$user) {
+        return redirect()->route('admins.index')->with('error', 'User not found.');
+    }
 
-         // Assign the role to the user
-         $user->assignRole($role);
+    // Find the role by name
+    $role = Role::where('name', $request->role)->first();
 
-         return redirect()->route('users.index')->with('success', 'Role assigned successfully');
-     }
+    if (!$role) {
+        return redirect()->route('admins.index')->with('error', 'Role not found.');
+    }
+
+    // Check if the user already has the assigned role
+    if ($user->hasRole($role)) {
+        return redirect()->route('admins.index')->with('error', 'User already has the role.');
+    }
+
+    // Assign the role to the user
+    $user->assignRole($role);
+
+    return redirect()->route('admins.index')->with('success', 'Role assigned successfully');
+}
+
+
+
     public function store(Request $request)
     {
         // $request->validate([

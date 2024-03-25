@@ -20,21 +20,8 @@ class AuthController extends Controller
      */
     public function index()
     {
-        // Get the authenticated user
-        $user = Auth::user();
+        return view('auth.login');
 
-        // Check if the user is authenticated
-        if ($user) {
-            // Get the user's first name and last name
-            $first_name = $user->first_name;
-            $last_name = $user->last_name;
-
-            // Return the view with the user's first name and last name
-            return view('auth.login', compact('first_name', 'last_name'));
-        } else {
-            // If user is not authenticated, redirect to login page
-            return redirect()->route('login');
-        }
     }
     /**
      * Show the form for creating a new resource.
