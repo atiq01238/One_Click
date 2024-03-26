@@ -8,10 +8,17 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\Model;
+
 
 
 class User extends Authenticatable
 {
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class);
+    }
+
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     /**

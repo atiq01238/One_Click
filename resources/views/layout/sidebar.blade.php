@@ -74,23 +74,34 @@
     <!-- Nav Item - Project Manager -->
     {{-- @if(auth()->check() && (auth()->user()->hasRole('Super-Admin') || auth()->user()->hasRole('Project-Manager') )) --}}
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProjectManager"
-            aria-expanded="false" aria-controls="collapseProjectManager">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProjectManagement"
+            aria-expanded="false" aria-controls="collapseProjectManagement">
             <i class="fas fa-fw fa-cog"></i>
-            <span>Project Manager</span>
+            <span>Project Management</span>
         </a>
+        <div id="collapseProjectManagement" class="collapse" aria-labelledby="headingProjectManagement"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header"></h6>
+                <a class="collapse-item" href="{{ url('projects') }}">All Projects</a>
+                <a class="collapse-item" href="{{ url('projects/create') }}">Create Project</a>
+            </div>
+        </div>
     </li>
+
+
+
     {{-- @endif --}}
 
     <!-- Nav Item - User Task -->
     {{-- @if(auth()->check() && auth()->user()->roles->isEmpty() || (auth()->user()->hasRole('Super-Admin') || auth()->user()->hasRole('Project-Manager') )) --}}
-    <li class="nav-item">
+    {{-- <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUserTask"
             aria-expanded="false" aria-controls="collapseUserTask">
             <i class="fas fa-fw fa-cog"></i>
             <span>User Task</span>
         </a>
-    </li>
+    </li> --}}
     {{-- @endif --}}
 
     <!-- Sidebar Toggle Button -->

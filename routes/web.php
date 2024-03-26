@@ -7,6 +7,8 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\InviteController;
+use App\Http\Controllers\ProjectController;
+use App\Services\FetchUserRoles;
 
 
 Route::get('/', function () {
@@ -21,20 +23,21 @@ Route::post('logout', [AuthController::class, 'logout']);
 
 //Users Routes
 
-Route::group(['middleware' => ['auth', 'fetchUserRoles']], function () {
+Route::group(['middleware' => ['auth', 'role:']], function () {
 
     Route::resource('users', UserController::class);
-    Route::get('/assign-role', [UserController::class, 'assignRoleForm'])->name('user.assignRoleForm');
-    Route::post('/assign-role', [UserController::class, 'assignRole'])->name('user.assignRole');
-    Route::resource('admins', AdminController::class);
+    Route::resource('invites', InviteController::class);
 
 });
+Route::get('/assign-role', [UserController::class, 'assignRoleForm'])->name('user.assignRoleForm');
+Route::post('/assign-role', [UserController::class, 'assignRole'])->name('user.assignRole');
 
 //Admin Routes
+Route::resource('admins', AdminController::class);
 Route::delete('/admins/{id}', 'AdminController@destroy')->name('admins.destroy');
 
-//Users Routes
-Route::resource('invites', InviteController::class);
+//Projects Routes
+Route::resource('projects', ProjectController::class);
 
 
 //Roles and Permissions
