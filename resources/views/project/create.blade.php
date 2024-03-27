@@ -58,17 +58,18 @@
                                     @enderror
                                 </div>
                                 <div class="mb-3">
-                                    <label for="assign_user">Assign User</label>
-                                    <select name="assign_user" id="assign_user" class="form-control">
+                                    <label for="">Assign User</label>
+                                    <select name="user_id" id="user_id" class="form-control">
                                         <option value="">Select User</option>
                                         @foreach($users as $user)
                                             <option value="{{ $user->id }}">{{ $user->email }}</option>
                                         @endforeach
                                     </select>
-                                    @error('assign_user')
+                                    @error('user_id')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
+
                                 <div class="mb-3">
                                     <label for="attachment">Attachment</label>
                                     <input type="file" name="attachment" id="attachment" class="form-control">

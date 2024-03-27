@@ -43,7 +43,7 @@ class InviteController extends Controller
         $user = Invite::create([
             'email' => $request->input('email'),
         ]);
-        Mail::to('mirzaatiq145@gmail.com')->send(new UserInvitation($user));
+        // Mail::to('mirzaatiq145@gmail.com')->send(new UserInvitation($user));
 
         return redirect()->back()->with('success', 'Invitation email has been sent successfully!');
     }

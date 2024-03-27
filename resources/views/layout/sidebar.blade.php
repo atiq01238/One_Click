@@ -34,8 +34,8 @@
     </div>
 
     <!-- Nav Item - User Management -->
-    {{-- @if(auth()->check() && auth()->user()->hasRole('Super-Admin')) --}}
-    <li class="nav-item">
+    {{-- @can('User Management') --}}
+        <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse"
             data-target="#collapseEmployeesUserManagement" aria-expanded="false"
             aria-controls="collapseEmployeesUserManagement">
@@ -51,28 +51,30 @@
             </div>
         </div>
     </li>
-    {{-- @endif --}}
+    {{-- @endcan --}}
+
 
     <!-- Nav Item - Permissions and Access Control -->
-    {{-- @if(auth()->check() && (auth()->user()->hasRole('Super-Admin') )) --}}
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePermissions"
-            aria-expanded="false" aria-controls="collapsePermissions">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Permissions and Access Control</span>
-        </a>
-        <div id="collapsePermissions" class="collapse" aria-labelledby="headingPermissions"
-            data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header"></h6>
-                <a class="collapse-item" href="{{ url('roles') }}">Roles</a>
-                <a class="collapse-item" href="{{ url('permissions') }}">Permissions</a>
+    {{-- @can('Permissions and Access Control') --}}
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePermissions"
+                aria-expanded="false" aria-controls="collapsePermissions">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>Permissions and Access Control</span>
+            </a>
+            <div id="collapsePermissions" class="collapse" aria-labelledby="headingPermissions"
+                data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header"></h6>
+                    <a class="collapse-item" href="{{ url('roles') }}">Roles</a>
+                    <a class="collapse-item" href="{{ url('permissions') }}">Permissions</a>
+                </div>
             </div>
-        </div>
-    </li>
-    {{-- @endif --}}
+        </li>
+    {{-- @endcan --}}
+
     <!-- Nav Item - Project Manager -->
-    {{-- @if(auth()->check() && (auth()->user()->hasRole('Super-Admin') || auth()->user()->hasRole('Project-Manager') )) --}}
+    {{-- @can('access project management') --}}
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProjectManagement"
             aria-expanded="false" aria-controls="collapseProjectManagement">
@@ -88,21 +90,20 @@
             </div>
         </div>
     </li>
-
-
-
-    {{-- @endif --}}
+    {{-- @endcan --}}
 
     <!-- Nav Item - User Task -->
-    {{-- @if(auth()->check() && auth()->user()->roles->isEmpty() || (auth()->user()->hasRole('Super-Admin') || auth()->user()->hasRole('Project-Manager') )) --}}
-    {{-- <li class="nav-item">
+
+    {{-- @if (!Auth::user()->hasAnyRole()) --}}
+    <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUserTask"
             aria-expanded="false" aria-controls="collapseUserTask">
             <i class="fas fa-fw fa-cog"></i>
             <span>User Task</span>
         </a>
-    </li> --}}
-    {{-- @endif --}}
+    </li>
+{{-- @endif --}}
+
 
     <!-- Sidebar Toggle Button -->
     <div class="text-center d-none d-md-inline">

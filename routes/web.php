@@ -9,11 +9,17 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\InviteController;
 use App\Http\Controllers\ProjectController;
 use App\Services\FetchUserRoles;
+use Illuminate\Support\Facades\Gate;
+
 
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Route::middleware(['auth'])->group(function () {
+//     Route::get('/', [AuthController::class, 'dashboard'])->name('dashboard');
+// });
 //Auth Routes
 Route::get('register', [AuthController::class, 'create'])->name('register');
 Route::post('register', [AuthController::class, 'store']);
@@ -23,12 +29,15 @@ Route::post('logout', [AuthController::class, 'logout']);
 
 //Users Routes
 
-Route::group(['middleware' => ['auth', 'role:']], function () {
+// Route::group(['middleware' => ['auth',]], function () {
 
-    Route::resource('users', UserController::class);
-    Route::resource('invites', InviteController::class);
 
-});
+
+// });
+Route::resource('users', UserController::class);
+Route::resource('invites', InviteController::class);
+
+
 Route::get('/assign-role', [UserController::class, 'assignRoleForm'])->name('user.assignRoleForm');
 Route::post('/assign-role', [UserController::class, 'assignRole'])->name('user.assignRole');
 
@@ -37,8 +46,8 @@ Route::resource('admins', AdminController::class);
 Route::delete('/admins/{id}', 'AdminController@destroy')->name('admins.destroy');
 
 //Projects Routes
-Route::resource('projects', ProjectController::class);
 
+Route::resource('projects', ProjectController::class);
 
 //Roles and Permissions
 Route::resource('permissions', PermissionController::class);

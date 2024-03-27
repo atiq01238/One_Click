@@ -14,11 +14,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class User extends Authenticatable
 {
-    public function projects()
-    {
-        return $this->belongsToMany(Project::class);
-    }
-
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     /**
@@ -51,4 +46,15 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function projects()
+    {
+
+        return $this->hasMany(Project::class);
+    }
+
+    // public function createdProjects()
+    // {
+    //     return $this->hasMany(Project::class, 'user_id');
+    // }
 }

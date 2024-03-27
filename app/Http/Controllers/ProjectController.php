@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Project;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\ValidationException;
 
@@ -13,10 +14,24 @@ class ProjectController extends Controller
     /**
      * Display a listing of the resource.
      */
+    // public function __construct()
+    // {
+    //     $this->middleware('permission:create-project')->only(['store']);
+    // }
+
     public function index()
     {
-        $projects = Project::all(); // Fetch all users from the database
-        return view('project.index', compact('projects')); // Pass the users data to the view
+
+
+        if (Auth::user()->can('view-all-projects')) {
+
+            $projects = Project::all();
+        } else {
+
+            $projects = Auth::user()->projects()->get();
+        }
+
+        return view('project.index', compact('projects'));
     }
 
     /**
@@ -24,7 +39,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        $users = User::all(); // Fetch all users
+        $users = User::all();
         return view('project.create', compact('users'));
     }
 
@@ -33,56 +48,51 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        // Validate the incoming request data
         $request->validate([
             'project_name' => 'required|string|max:255',
             'description' => 'required|string',
             'start_date' => 'required|date',
             'end_date' => 'required|date',
-            'assign_user' => 'required|exists:users,id',
-            'attachment' => 'nullable|image|mimes:jpeg,png,gif|max:2048', // Adjust MIME types as needed
+            'user_id' => 'required|exists:users,id',
+            'attachment' => 'nullable|image|mimes:jpeg,png,gif|max:2048',
         ]);
 
         try {
-            // Format the date for start_date and end_date fields
             $startDate = Carbon::createFromFormat('d F Y', $request->input('start_date'))->format('Y-m-d');
             $endDate = Carbon::createFromFormat('d F Y', $request->input('end_date'))->format('Y-m-d');
         } catch (\Exception $e) {
-            // If the date format is incorrect, return validation error
             throw ValidationException::withMessages([
                 'start_date' => 'Invalid start date format. Please use the format "d F Y".',
                 'end_date' => 'Invalid end date format. Please use the format "d F Y".',
             ]);
         }
 
-        // Store the user data in the database
-        $user = new Project();
-        $user->project_name = $request->input('project_name');
-        $user->description = $request->input('description');
-        $user->start_date = $startDate;
-        $user->end_date = $endDate;
-        $user->assign_user = $request->input('assign_user');
+        $project = new Project();
+        $project->project_name = $request->input('project_name');
+        $project->description = $request->input('description');
+        $project->start_date = $startDate;
+        $project->end_date = $endDate;
+        $project->user_id = $request->input('user_id');
+        $project->creator_id = Auth::id(); // Set the creator ID based on the authenticated user
 
-        // Handle file upload if attachment is provided
         if ($request->hasFile('attachment')) {
-            $attachmentPath = $request->file('attachment')->store('attachments', 'public'); // Store the attachment file in the public disk
-            $user->attachment = $attachmentPath;
-        } elseif ($request->filled('attachment')) {
-            // Handle non-file input for attachment (e.g., image URL)
-            $user->attachment = $request->input('attachment');
+            $attachmentPath = $request->file('attachment')->store('attachments', 'public');
+            $project->attachment = $attachmentPath;
         }
 
-        $user->save(); // Save the user data to the database
+        $project->save();
 
-        return redirect('projects')->with('success', 'User created successfully'); // Redirect back with success message
+        return redirect('projects')->with('success', 'Project created successfully');
     }
+
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $project = Project::findOrFail($id);
+        return view('project.show', compact('project'));
     }
 
     /**
@@ -105,7 +115,7 @@ class ProjectController extends Controller
         'description' => 'required|string',
         'start_date' => 'required|date',
         'end_date' => 'required|date',
-        'assign_user' => 'required|exists:users,id',
+        'user_id' => 'required|exists:users,id',
         'attachment' => 'nullable|image|mimes:jpeg,png,gif|max:2048', // Adjust MIME types as needed
     ]);
 
@@ -127,7 +137,7 @@ class ProjectController extends Controller
         'description' => $request->input('description'),
         'start_date' => $startDate,
         'end_date' => $endDate,
-        'assign_user' => $request->input('assign_user'),
+        'user_id' => $request->input('user_id'),
     ]);
 
     // Handle file upload if attachment is provided

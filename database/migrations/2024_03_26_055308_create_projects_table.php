@@ -17,8 +17,9 @@ return new class extends Migration
             $table->text('description');
             $table->date('start_date');
             $table->date('end_date');
-            $table->unsignedBigInteger('assign_user');
-            $table->foreign('assign_user')->references('id')->on('users');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->unsignedBigInteger('creator_id');
+            $table->foreign('creator_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('attachment')->nullable();
             $table->timestamps();
         });

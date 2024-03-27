@@ -18,6 +18,16 @@ class AuthController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+
+    public function dashboard()
+    {
+        $user = Auth::user();
+
+        $assignedProjects = $user->projects;
+
+        return view('welcome', ['assignedProjects' => $assignedProjects]);
+    }
     public function index()
     {
         return view('auth.login');
@@ -39,7 +49,7 @@ class AuthController extends Controller
     $validator = Validator::make($request->all(), [
         'first_name' => 'required|string|max:255',
         'last_name' => 'required|string|max:255',
-        'email' => 'required|email|unique:users,email',
+        'email' => 'required',
         'password' => 'required|string|min:8',
     ]);
 

@@ -14,12 +14,21 @@ class Project extends Model
         'description',
         'start_date',
         'end_date',
-        'assign_user',
+        'user_id',
         'attachment',
     ];
 
-    public function assignUser()
-    {
-        return $this->belongsToMany(User::class, 'assign_user');
-    }
+    public function user()
+        {
+            return $this->belongsTo(User::class);
+        }
+
+    // public function creator()
+    // {
+    //     return $this->belongsTo(User::class);
+    // }
+    // public function creator()
+    // {
+    //     return $this->belongsTo(User::class, 'user_id');
+    // }
 }
