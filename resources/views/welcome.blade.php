@@ -98,8 +98,8 @@
     </div>
 
     <!-- Content Row -->
-    {{-- @can('Assigned Projects') --}}
-         {{-- <div class="row">
+
+    <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
@@ -107,15 +107,22 @@
                 </div>
                 <div class="card-body">
                     <ul>
-                        @foreach($assignedProjects as $project)
+                        @foreach($projects as $project)
                             <li>{{ $project->project_name }}</li>
+                            {{-- <li>{{ $project->description }}</li> --}}
                         @endforeach
                     </ul>
                 </div>
             </div>
         </div>
-    </div> --}}
-    {{-- @endcan --}}
+    </div>
+
+
+
+
+
+
+
 
 
 

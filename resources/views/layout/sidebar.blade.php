@@ -34,7 +34,7 @@
     </div>
 
     <!-- Nav Item - User Management -->
-    {{-- @can('User Management') --}}
+    @can('User Management')
         <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse"
             data-target="#collapseEmployeesUserManagement" aria-expanded="false"
@@ -51,11 +51,11 @@
             </div>
         </div>
     </li>
-    {{-- @endcan --}}
+    @endcan
 
 
     <!-- Nav Item - Permissions and Access Control -->
-    {{-- @can('Permissions and Access Control') --}}
+    @can('Permissions and Access Control')
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePermissions"
                 aria-expanded="false" aria-controls="collapsePermissions">
@@ -71,10 +71,10 @@
                 </div>
             </div>
         </li>
-    {{-- @endcan --}}
+    @endcan
 
     <!-- Nav Item - Project Manager -->
-    {{-- @can('access project management') --}}
+    @can('access project management')
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProjectManagement"
             aria-expanded="false" aria-controls="collapseProjectManagement">
@@ -90,19 +90,20 @@
             </div>
         </div>
     </li>
-    {{-- @endcan --}}
+    @endcan
 
     <!-- Nav Item - User Task -->
 
-    {{-- @if (!Auth::user()->hasAnyRole()) --}}
+    @if (!Auth::user()->hasAnyRole())
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUserTask"
+        <a class="nav-link collapsed" href="{{ url('tasks') }}" data-bs-toggle="collapse" data-bs-target="#collapseUserTask"
             aria-expanded="false" aria-controls="collapseUserTask">
             <i class="fas fa-fw fa-cog"></i>
             <span>User Task</span>
         </a>
     </li>
-{{-- @endif --}}
+
+    @endif
 
 
     <!-- Sidebar Toggle Button -->

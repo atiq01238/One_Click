@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\UserFakeMail;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Invite;
-
+use App\Models\Project;
 
 
 class AuthController extends Controller
@@ -20,14 +20,18 @@ class AuthController extends Controller
      */
 
 
-    public function dashboard()
+     public function dashboard()
     {
         $user = Auth::user();
 
-        $assignedProjects = $user->projects;
-
-        return view('welcome', ['assignedProjects' => $assignedProjects]);
+        if ($user->can('access-all-assigned-projects')) {
+            $projects = Project::all();
+        } else {
+            $projects = $user->projects;
+        }
+        return view('welcome', compact('projects'));
     }
+
     public function index()
     {
         return view('auth.login');
@@ -45,27 +49,27 @@ class AuthController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-{
-    $validator = Validator::make($request->all(), [
-        'first_name' => 'required|string|max:255',
-        'last_name' => 'required|string|max:255',
-        'email' => 'required',
-        'password' => 'required|string|min:8',
-    ]);
+    {
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required',
+            'password' => 'required|string|min:8',
+        ]);
 
-    if ($validator->fails()) {
-        return back()->withErrors($validator)->withInput();
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $user = User::create([
+            'first_name' => $request->input('first_name'),
+            'last_name' => $request->input('last_name'),
+            'email' => $request->input('email'),
+            'password' => Hash::make($request->input('password')),
+        ]);
+
+        return redirect('login')->with('success', 'Registration successful. You can now log in.');
     }
-
-    $user = User::create([
-        'first_name' => $request->input('first_name'),
-        'last_name' => $request->input('last_name'),
-        'email' => $request->input('email'),
-        'password' => Hash::make($request->input('password')),
-    ]);
-
-    return redirect('login')->with('success', 'Registration successful. You can now log in.');
-}
 
 
     /**

@@ -8,6 +8,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\InviteController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\TaskController;
 use App\Services\FetchUserRoles;
 use Illuminate\Support\Facades\Gate;
 
@@ -17,9 +18,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::middleware(['auth'])->group(function () {
-//     Route::get('/', [AuthController::class, 'dashboard'])->name('dashboard');
-// });
+Route::middleware(['auth'])->group(function () {
+    Route::get('/', [AuthController::class, 'dashboard'])->name('dashboard');
+});
 //Auth Routes
 Route::get('register', [AuthController::class, 'create'])->name('register');
 Route::post('register', [AuthController::class, 'store']);
@@ -48,6 +49,11 @@ Route::delete('/admins/{id}', 'AdminController@destroy')->name('admins.destroy')
 //Projects Routes
 
 Route::resource('projects', ProjectController::class);
+
+
+//Task Route
+
+Route::resource('tasks', TaskController::class);
 
 //Roles and Permissions
 Route::resource('permissions', PermissionController::class);

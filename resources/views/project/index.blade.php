@@ -12,7 +12,6 @@
                 <div class="card">
                     <div class="card-header">
                         <h4>All Projects
-                        {{-- <a id="invite" class="btn btn-primary" style="float: right;"> </a> --}}
                         <a href="{{ url('projects/create') }}" class="btn btn-primary" style="float: right;">Create
                             Project</a>
                         </h4>
@@ -28,7 +27,6 @@
                                     <th>Start Date</th>
                                     <th>End Date</th>
                                     <th>Assign User</th>
-                                    {{-- <th>Attachment</th> --}}
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -42,15 +40,15 @@
                                     <td>{{ $project->end_date }}</td>
                                     <td>{{ $project->user->first_name }} {{ $project->user->last_name }}</td>
 
-                                   <td>
-                                        <div class="btn-group" role="group" aria-label="Project Actions">
+                                    <td>
+                                        <div class="btn-group" role="group" >
                                             <a href="{{ route('projects.edit', $project->id) }}" class="btn btn-primary">Edit</a>
                                             <form action="{{ route('projects.destroy', $project->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger">Delete</button>
                                             </form>
-                                            <a href="#" class="btn btn-info backlog-btn" data-project-id="{{ $project->id }}">BackLog</a>
+                                            <a href="#" type="button" class="btn btn-info" data-toggle="modal" data-target="#backlogModal-{{ $project->id }}">BackLog</a>
                                         </div>
                                     </td>
 
@@ -66,43 +64,34 @@
 </section>
 
 @stop
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     $(document).ready(function() {
         $(".backlog-btn").click(function(e) {
             e.preventDefault();
             var projectId = $(this).data('project-id');
-            $.ajax({
-                url: "{{ url('projects') }}" + "/" + projectId,
-                type: 'GET',
-                success: function(response) {
-                    $('#backlogModalLabel').text('Project Details - ' + response.project_name);
-                    $('#backlogModalBody').html('<p><strong>Description:</strong> ' + response.description + '</p>' +
-                                                '<p><strong>Start Date:</strong> ' + response.start_date + '</p>' +
-                                                '<p><strong>End Date:</strong> ' + response.end_date + '</p>' +
-                                                '<p><strong>Assigned User:</strong> ' + response.user.first_name + ' ' + response.user.last_name + '</p>' +
-                                                '<p><strong>Attachment:</strong> ' + response.attachment + '</p>');
-                    $('#backlogModal').modal('show');
-                }
-            });
+            $('#backlogModal-' + projectId).modal('show');
         });
     });
 </script>
 
-<div class="modal fade" id="backlogModal" tabindex="-1" role="dialog" aria-labelledby="backModalLabel" aria-hidden="true">
+@foreach ($projects as $project)
+<div class="modal fade" id="backlogModal-{{ $project->id }}" role="dialog" aria-labelledby="backModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="backlogModalLabel">Project Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" aria-label="Close"></button>
             </div>
-            <div class="modal-body" id="backlogModalBody">
-                <!-- Project details will be loaded dynamically here -->
+            <div class="modal-body">
+                <h5>{{ $project->project_name }}</h5>
+                <p>Description: {{ $project->description }}</p>
+                <p>Start Date: {{ $project->start_date }}</p>
+                <p>End Date: {{ $project->end_date }}</p>
+                <p>Attachment {{ $project->attachment }}</p>
             </div>
         </div>
     </div>
 </div>
-
-
+@endforeach

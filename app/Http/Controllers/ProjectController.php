@@ -24,11 +24,9 @@ class ProjectController extends Controller
 
 
         if (Auth::user()->can('view-all-projects')) {
-
             $projects = Project::all();
         } else {
-
-            $projects = Auth::user()->projects()->get();
+            $projects = Project::where('creator_id',Auth::user()->id)->get();
         }
 
         return view('project.index', compact('projects'));
