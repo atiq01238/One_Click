@@ -71,7 +71,7 @@ class ProjectController extends Controller
         $project->start_date = $startDate;
         $project->end_date = $endDate;
         $project->user_id = $request->input('user_id');
-        $project->creator_id = Auth::id(); // Set the creator ID based on the authenticated user
+        $project->creator_id = Auth::id();
 
         if ($request->hasFile('attachment')) {
             $attachmentPath = $request->file('attachment')->store('attachments', 'public');

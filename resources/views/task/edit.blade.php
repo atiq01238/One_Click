@@ -16,6 +16,7 @@
                         <div class="card-body">
                             <form action="{{ route('tasks.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
+                                @method('PUT')
                                 <div class="mb-3">
                                     <label for="project_id">Project</label>
                                     <select name="project_id" id="project_id" class="form-control">

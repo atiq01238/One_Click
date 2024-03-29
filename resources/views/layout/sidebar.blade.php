@@ -34,7 +34,7 @@
     </div>
 
     <!-- Nav Item - User Management -->
-    @can('User Management')
+    {{-- @can('User Management') --}}
         <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse"
             data-target="#collapseEmployeesUserManagement" aria-expanded="false"
@@ -51,11 +51,11 @@
             </div>
         </div>
     </li>
-    @endcan
+    {{-- @endcan --}}
 
 
     <!-- Nav Item - Permissions and Access Control -->
-    @can('Permissions and Access Control')
+    {{-- @can('Permissions and Access Control') --}}
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePermissions"
                 aria-expanded="false" aria-controls="collapsePermissions">
@@ -71,10 +71,10 @@
                 </div>
             </div>
         </li>
-    @endcan
+    {{-- @endcan --}}
 
     <!-- Nav Item - Project Manager -->
-    @can('access project management')
+    {{-- @can('access project management') --}}
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProjectManagement"
             aria-expanded="false" aria-controls="collapseProjectManagement">
@@ -90,20 +90,42 @@
             </div>
         </div>
     </li>
-    @endcan
+    {{-- @endcan --}}
 
     <!-- Nav Item - User Task -->
 
-    @if (!Auth::user()->hasAnyRole())
+    {{-- @if (!Auth::user()->hasAnyRole()) --}}
     <li class="nav-item">
-        <a class="nav-link collapsed" href="{{ url('tasks') }}" data-bs-toggle="collapse" data-bs-target="#collapseUserTask"
-            aria-expanded="false" aria-controls="collapseUserTask">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTaskManagement" aria-expanded="false" aria-controls="collapseTaskManagement">
             <i class="fas fa-fw fa-cog"></i>
-            <span>User Task</span>
+            <span>Task Management</span>
         </a>
+        <div id="collapseTaskManagement" class="collapse" aria-labelledby="headingTaskManagement" data-bs-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <!-- Dropdown content goes here -->
+                <a class="collapse-item" href="{{ url('tasks') }}"> All Task</a>
+                <a class="collapse-item" href="{{ url('tasks/create') }}"> Create Task</a>
+                <!-- Add more dropdown items as needed -->
+            </div>
+        </div>
     </li>
 
-    @endif
+    {{-- @endif --}}
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTask" aria-expanded="false" aria-controls="collapseTask">
+            <i class="fas fa-fw fa-tasks"></i> <!-- Assuming "fa-tasks" represents tasks -->
+            <span>Tasks</span>
+        </a>
+        <div id="collapseTask" class="collapse" aria-labelledby="headingTask" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <!-- Place your task-related navigation links here -->
+                {{-- <h6 class="collapse-header">Task Management:</h6> --}}
+                <a class="collapse-item" href="">All Tasks</a>
+                {{-- <a class="collapse-item" href="{{ url('tasks/create') }}">Create Task</a> --}}
+            </div>
+        </div>
+    </li>
 
 
     <!-- Sidebar Toggle Button -->

@@ -11,6 +11,7 @@ use App\Mail\UserFakeMail;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Invite;
 use App\Models\Project;
+use App\Models\Task;
 
 
 class AuthController extends Controller
@@ -20,17 +21,35 @@ class AuthController extends Controller
      */
 
 
-     public function dashboard()
+    public function dashboard()
     {
-        $user = Auth::user();
+        $user = auth()->user();
 
-        if ($user->can('access-all-assigned-projects')) {
-            $projects = Project::all();
-        } else {
-            $projects = $user->projects;
-        }
-        return view('welcome', compact('projects'));
+        $projectsQuery = Project::query();
+        $tasksQuery = Task::query();
+
+        $projectsQuery->when($user->can('access-all-assigned-projects'), function ($query) {
+            return $query->with('tasks');
+        }, function ($query) use ($user) {
+            return $query->whereIn('id', $user->projects()->pluck('id'));
+        });
+
+        $tasksQuery->when($user->can('access-all-assigned-tasks'), function ($query) {
+            return $query;
+        }, function ($query) use ($user) {
+            return $query->whereIn('project_id', $user->projects()->pluck('id'));
+        });
+
+        $projects = $projectsQuery->get();
+        $tasks = $tasksQuery->get();
+
+        return view('welcome', compact('projects', 'tasks'));
     }
+
+
+
+
+
 
     public function index()
     {
