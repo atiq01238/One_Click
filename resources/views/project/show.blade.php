@@ -20,7 +20,12 @@
                         <p class="mb-2"><strong>End Date:</strong> {{ $project->end_date }}</p>
                         <p class="mb-0"><strong>Assigned User:</strong> {{ $project->user->first_name }} {{ $project->user->last_name }}</p>
                         <!-- Add more details here as needed -->
-                        <p class="mb-2"><strong>Attachment:</strong> {{ $project->attachment }}</p>
+                        {{-- @if ($project->attachment)
+                            <img src="{{ asset('storage/' . $project->attachment) }}" alt="Project Image">
+                        @else
+                            <p>No image available</p>
+                        @endif --}}
+
                     </div>
                 </div>
             </div>

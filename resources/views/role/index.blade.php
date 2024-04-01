@@ -34,7 +34,7 @@
                         </div>
                         <div class="card-body">
                             <table class="table table-bordered ">
-                                <thead ">
+                                <thead >
                                     <tr>
                                         <th style="padding: 10px;">ID</th>
                                         <th style="padding: 10px;">Name</th>

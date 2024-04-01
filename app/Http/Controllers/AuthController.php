@@ -37,7 +37,7 @@ class AuthController extends Controller
         $tasksQuery->when($user->can('access-all-assigned-tasks'), function ($query) {
             return $query;
         }, function ($query) use ($user) {
-            return $query->whereIn('project_id', $user->projects()->pluck('id'));
+            return $query->whereIn('id', $user->tasks()->pluck('id'));
         });
 
         $projects = $projectsQuery->get();

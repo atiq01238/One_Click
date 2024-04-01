@@ -11,11 +11,16 @@ class Task extends Model
     protected $fillable = [
         'project_id',
         'task_name',
+        'description',
         'start_date',
         'end_date',
         'user_id',
+        'status',
         'attachment',
     ];
+    const STATUS_PENDING = 'tode';
+    const STATUS_IN_PROGRESS = 'in_progress';
+    const STATUS_COMPLETED = 'done';
     public function project()
     {
         return $this->belongsTo(Project::class, 'project_id');

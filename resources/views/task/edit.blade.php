@@ -8,21 +8,21 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Create Project
-                                <a href="" class="btn btn-primary" style="float: right;">Back</a>
+                            <h4>Edit Task
+                                <a href="{{ url('tasks') }}" class="btn btn-primary" style="float: right;">Back</a>
                             </h4>
                         </div>
                         @include('validate.message')
                         <div class="card-body">
-                            <form action="{{ route('tasks.store') }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('tasks.update', $task->id) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
-                                @method('PUT')
+                                @method('PUT') <!-- Method Spoofing -->
                                 <div class="mb-3">
                                     <label for="project_id">Project</label>
                                     <select name="project_id" id="project_id" class="form-control">
                                         <option value="">Select Project</option>
                                         @foreach($projects as $project)
-                                            <option value="{{ $project->id }}">{{ $project->project_name }}</option>
+                                            <option value="{{ $project->id }}" {{ $project->id == $task->project_id ? 'selected' : '' }}>{{ $project->project_name }}</option>
                                         @endforeach
                                     </select>
                                     @error('project_id')
@@ -31,15 +31,22 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="task_name">Task Name</label>
-                                    <input type="text" name="task_name" id="task_name" class="form-control">
+                                    <input type="text" name="task_name" id="task_name" class="form-control" value="{{ $task->task_name }}">
                                     @error('task_name')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label for="description">Description</label>
+                                    <input type="text" name="description" id="description" class="form-control">
+                                    @error('description')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="mb-3">
                                     <label for="start_date">Start Date</label>
                                     <div class="input-group date">
-                                        <input type="text" class="form-control" id="start_date" name="start_date">
+                                        <input type="text" class="form-control" id="start_date" name="start_date" value="{{ $task->start_date }}">
                                         <div class="input-group-append">
                                             <span class="input-group-text">
                                                 <i class="fa fa-calendar"></i>
@@ -53,7 +60,7 @@
                                 <div class="mb-3">
                                     <label for="end_date">End Date</label>
                                     <div class="input-group date">
-                                        <input type="text" name="end_date" id="end_date" class="form-control">
+                                        <input type="text" name="end_date" id="end_date" class="form-control" value="{{ $task->end_date }}">
                                         <div class="input-group-append">
                                             <span class="input-group-text">
                                                 <i class="fa fa-calendar"></i>
@@ -69,7 +76,7 @@
                                     <select name="user_id" id="user_id" class="form-control">
                                         <option value="">Select User</option>
                                         @foreach($users as $user)
-                                            <option value="{{ $user->id }}">{{ $user->email }}</option>
+                                            <option value="{{ $user->id }}" {{ $user->id == $task->user_id ? 'selected' : '' }}>{{ $user->email }}</option>
                                         @endforeach
                                     </select>
                                     @error('user_id')
@@ -118,5 +125,3 @@
 </script>
 
 @endpush
-
-

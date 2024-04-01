@@ -9,7 +9,7 @@
                     <div class="card">
                         <div class="card-header">
                             <h4>Create Project
-                                <a href="" class="btn btn-primary" style="float: right;">Back</a>
+                                <a href="{{ url('tasks') }}" class="btn btn-primary" style="float: right;">Back</a>
                             </h4>
                         </div>
                         @include('validate.message')
@@ -32,6 +32,13 @@
                                     <label for="task_name">Task Name</label>
                                     <input type="text" name="task_name" id="task_name" class="form-control">
                                     @error('task_name')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label for="description">Description</label>
+                                    <input type="text" name="description" id="description" class="form-control">
+                                    @error('description')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -75,7 +82,17 @@
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
-
+                                <div class="mb-3">
+                                    <label for="status">Status</label>
+                                    <select name="status" id="status" class="form-control">
+                                        <option value="todo">ToDo</option>
+                                        <option value="in_progress">In Progress</option>
+                                        <option value="done">Done</option>
+                                    </select>
+                                    @error('status')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
                                 <div class="mb-3">
                                     <label for="attachment">Attachment</label>
                                     <input type="file" name="attachment" id="attachment" class="form-control">

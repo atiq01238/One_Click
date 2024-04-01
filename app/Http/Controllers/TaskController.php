@@ -9,6 +9,7 @@ use App\Models\Task;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Validation\Rule;
 
 
 class TaskController extends Controller
@@ -16,6 +17,29 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function updateStatus(Request $request, $id)
+    {
+        // Validate the incoming request data
+        $validator = Validator::make($request->all(), [
+            'status' => ['required', Rule::in(['todo', 'in_progress', 'done'])],
+        ]);
+
+        // Check if the validation fails
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        // Find the task by ID
+        $task = Task::findOrFail($id);
+        $task->status = $request->input('status');
+
+        // Save the updated status
+        $task->save();
+
+        // Redirect with success message
+        return redirect()->back()->with('success', 'Task status updated successfully.');
+    }
+
     public function index()
     {
         $tasks = Task::with('project')->get();
@@ -46,9 +70,11 @@ class TaskController extends Controller
         $validator = Validator::make($request->all(), [
             'project_id' => 'required|exists:projects,id',
             'task_name' => 'required|string|max:255',
+            'description' => 'required|string',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'user_id' => 'required|exists:users,id',
+            'status' => ['required', Rule::in(['todo', 'in_progress', 'done'])],
             'attachment' => 'nullable|image|mimes:jpeg,png,gif|max:2048',
         ]);
 
@@ -58,16 +84,24 @@ class TaskController extends Controller
         }
 
         // Parse dates using Carbon
-        $startDate = Carbon::createFromFormat('d F Y', $request->input('start_date'))->format('Y-m-d');
-        $endDate = Carbon::createFromFormat('d F Y', $request->input('end_date'))->format('Y-m-d');
-
+        try {
+            $startDate = Carbon::createFromFormat('d F Y', $request->input('start_date'))->format('Y-m-d');
+            $endDate = Carbon::createFromFormat('d F Y', $request->input('end_date'))->format('Y-m-d');
+        } catch (\Exception $e) {
+            throw ValidationException::withMessages([
+                'start_date' => 'Invalid start date format. Please use the format "d F Y".',
+                'end_date' => 'Invalid end date format. Please use the format "d F Y".',
+            ]);
+        }
         // Create a new Task instance
         $task = new Task();
         $task->project_id = $request->input('project_id');
         $task->task_name = $request->input('task_name');
+        $task->description = $request->input('description');
         $task->start_date = $startDate;
         $task->end_date = $endDate;
         $task->user_id = $request->input('user_id');
+        $task->status = $request->input('status');
         $task->creator_id = auth()->user()->id;
 
         // Handle attachment upload
@@ -96,18 +130,74 @@ class TaskController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $task = Task::findOrFail($id);
+        $projects = Project::all();
+        $users = User::all();
+
+        return view('task.edit', compact('task', 'projects', 'users'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        // Validate the incoming request data
+        $validator = Validator::make($request->all(), [
+            'project_id' => 'required|exists:projects,id',
+            'task_name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'user_id' => 'required|exists:users,id',
+            'status' => ['required', Rule::in(['todo', 'in_progress', 'done'])],
+            'attachment' => 'nullable|image|mimes:jpeg,png,gif|max:2048',
+        ]);
+
+        // Check if the validation fails
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        // Parse dates using Carbon
+        $startDate = Carbon::createFromFormat('d F Y', $request->input('start_date'))->format('Y-m-d');
+        $endDate = Carbon::createFromFormat('d F Y', $request->input('end_date'))->format('Y-m-d');
+
+        // Find the task by ID
+        $task = Task::findOrFail($id);
+        $task->project_id = $request->input('project_id');
+        $task->task_name = $request->input('task_name');
+        $task->description = $request->input('description');
+        $task->start_date = $startDate;
+        $task->end_date = $endDate;
+        $task->user_id = $request->input('user_id');
+        $task->status = $request->input('status');
+
+        // Only update the attachment if a new file is uploaded
+        if ($request->hasFile('attachment')) {
+            $validator = Validator::make($request->all(), [
+                'attachment' => 'image|mimes:jpeg,png,gif|max:2048',
+            ]);
+
+            // Check if the validation fails
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
+
+            // Handle attachment upload
+            $attachmentPath = $request->file('attachment')->store('attachments', 'public');
+            $task->attachment = $attachmentPath;
+        }
+
+        // Save the task
+        $task->save();
+
+        // Redirect with success message
+        return redirect()->back()->with('success', 'Task updated successfully.');
     }
+
 
     /**
      * Remove the specified resource from storage.

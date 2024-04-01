@@ -101,7 +101,7 @@
 
         <!-- Content Row -->
 
-        <div class="row">
+        <div class="row" style="display: flex, flex-direction: row" >
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
@@ -126,7 +126,7 @@
                     <div class="card-body">
                         <ul>
                             @foreach ($tasks as $task)
-                                <li>{{ $task->task_name }}</li>
+                                <li><a href="{{ route('tasks.show', $task->id) }}" >{{ $task->task_name }}</a></li>
                             @endforeach
                         </ul>
                     </div>
@@ -134,6 +134,7 @@
             </div>
         </div>
 
+        {{-- <li><a href="{{ route('tasks.show', $task->id) }}" class="btn btn-primary">click</a></li> --}}
 
 
 

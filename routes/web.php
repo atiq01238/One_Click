@@ -52,8 +52,8 @@ Route::resource('projects', ProjectController::class);
 
 
 //Task Route
-
 Route::resource('tasks', TaskController::class);
+Route::put('/tasks/{id}/update-status', [TaskController::class, 'updateStatus'])->name('tasks.updateStatus');
 
 //Roles and Permissions
 Route::resource('permissions', PermissionController::class);

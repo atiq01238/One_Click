@@ -26,7 +26,7 @@ class ProjectController extends Controller
         if (Auth::user()->can('view-all-projects')) {
             $projects = Project::all();
         } else {
-            $projects = Project::where('creator_id',Auth::user()->id)->get();
+            $projects = Project::where('creator_id', Auth::user()->id)->get();
         }
 
         return view('project.index', compact('projects'));
@@ -105,50 +105,55 @@ class ProjectController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    // ProjectController.php
+
     public function update(Request $request, Project $project)
-{
-    // Validate the incoming request data
-    $request->validate([
-        'project_name' => 'required|string|max:255',
-        'description' => 'required|string',
-        'start_date' => 'required|date',
-        'end_date' => 'required|date',
-        'user_id' => 'required|exists:users,id',
-        'attachment' => 'nullable|image|mimes:jpeg,png,gif|max:2048', // Adjust MIME types as needed
-    ]);
-
-    try {
-        // Format the date for start_date and end_date fields
-        $startDate = Carbon::createFromFormat('d F Y', $request->input('start_date'))->format('Y-m-d');
-        $endDate = Carbon::createFromFormat('d F Y', $request->input('end_date'))->format('Y-m-d');
-    } catch (\Exception $e) {
-        // If the date format is incorrect, return validation error
-        throw ValidationException::withMessages([
-            'start_date' => 'Invalid start date format. Please use the format "d F Y".',
-            'end_date' => 'Invalid end date format. Please use the format "d F Y".',
+    {
+        // Validate the incoming request data
+        $request->validate([
+            'project_name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'start_date' => 'required|date_format:d F Y',
+            'end_date' => 'required|date_format:d F Y',
+            'user_id' => 'required|exists:users,id',
+            'attachment' => 'nullable|image|mimes:jpeg,png,gif|max:2048', // Adjust MIME types as needed
         ]);
+
+        try {
+            // Format the date for start_date and end_date fields
+            $startDate = Carbon::createFromFormat('d F Y', $request->input('start_date'))->format('Y-m-d');
+            $endDate = Carbon::createFromFormat('d F Y', $request->input('end_date'))->format('Y-m-d');
+        } catch (\Exception $e) {
+            // If the date format is incorrect, return validation error
+            throw ValidationException::withMessages([
+                'start_date' => 'Invalid start date format. Please use the format "d F Y".',
+                'end_date' => 'Invalid end date format. Please use the format "d F Y".',
+            ]);
+        }
+
+        // Manually update project fields
+        $project->project_name = $request->input('project_name');
+        $project->description = $request->input('description');
+        $project->start_date = $startDate;
+        $project->end_date = $endDate;
+        $project->user_id = $request->input('user_id');
+
+        // Handle file upload if attachment is provided
+        if ($request->hasFile('attachment')) {
+            $attachmentPath = $request->file('attachment')->store('attachments', 'public'); // Store the attachment file in the public disk
+            $project->attachment = $attachmentPath;
+        } elseif ($request->filled('attachment')) {
+            // Handle non-file input for attachment (e.g., image URL)
+            $project->attachment = $request->input('attachment');
+        }
+
+        // Save the updated project
+        $project->save();
+
+        return redirect()->route('projects.index')->with('success', 'Project updated successfully.');
     }
 
-    // Update the project data in the database
-    $project->update([
-        'project_name' => $request->input('project_name'),
-        'description' => $request->input('description'),
-        'start_date' => $startDate,
-        'end_date' => $endDate,
-        'user_id' => $request->input('user_id'),
-    ]);
 
-    // Handle file upload if attachment is provided
-    if ($request->hasFile('attachment')) {
-        $attachmentPath = $request->file('attachment')->store('attachments', 'public'); // Store the attachment file in the public disk
-        $project->update(['attachment' => $attachmentPath]);
-    } elseif ($request->filled('attachment')) {
-        // Handle non-file input for attachment (e.g., image URL)
-        $project->update(['attachment' => $request->input('attachment')]);
-    }
-
-    return redirect()->route('projects.index')->with('success', 'Project updated successfully.');
-}
     /**
      * Remove the specified resource from storage.
      */

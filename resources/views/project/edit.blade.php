@@ -1,5 +1,6 @@
+<!-- edit.blade.php -->
+
 @extends('layout.master')
-@section('content')
 
 @section('content')
     <section class="content">
@@ -9,7 +10,7 @@
                     <div class="card">
                         <div class="card-header">
                             <h4>Edit Project
-                                <a href="{{ url('projects') }}" class="btn btn-primary" style="float: right;">Back</a>
+                                <a href="{{ route('projects.index') }}" class="btn btn-primary" style="float: right;">Back</a>
                             </h4>
                         </div>
                         @include('validate.message')
@@ -60,14 +61,14 @@
                                     @enderror
                                 </div>
                                 <div class="mb-3">
-                                    <label for="assign_user">Assign User</label>
-                                    <select name="assign_user" id="assign_user" class="form-control">
+                                    <label for="user_id">Assign User</label>
+                                    <select name="user_id" id="user_id" class="form-control">
                                         <option value="">Select User</option>
                                         @foreach($users as $user)
-                                            <option value="{{ $user->id }}" {{ old('assign_user', $project->assign_user) == $user->id ? 'selected' : '' }}>{{ $user->email }}</option>
+                                            <option value="{{ $user->id }}" {{ old('user_id', $project->user_id) == $user->id ? 'selected' : '' }}>{{ $user->email }}</option>
                                         @endforeach
                                     </select>
-                                    @error('assign_user')
+                                    @error('user_id')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -90,7 +91,6 @@
     </section>
 @endsection
 
-@stop
 @push('scripts')
 <script>
     $(document).ready(function() {
