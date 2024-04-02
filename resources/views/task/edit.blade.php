@@ -1,5 +1,4 @@
 @extends('layout.master')
-{{-- @include('project.bootstrap') --}}
 @section('content')
     <section class="content">
         <div class="container">
@@ -16,7 +15,7 @@
                         <div class="card-body">
                             <form action="{{ route('tasks.update', $task->id) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
-                                @method('PUT') <!-- Method Spoofing -->
+                                @method('PUT')
                                 <div class="mb-3">
                                     <label for="project_id">Project</label>
                                     <select name="project_id" id="project_id" class="form-control">

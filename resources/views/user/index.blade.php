@@ -16,8 +16,6 @@
                         <div class="card-header">
                             <h4>User
                                 <a id="invite" class="btn btn-primary" style="float: right;"> Invite User</a>
-                                {{-- <a href="{{ url('users/create') }}" class="btn btn-primary" style="float: right;">Create
-                                    Role</a> --}}
                             </h4>
                         </div>
 
@@ -52,7 +50,6 @@
                                     </tbody>
                             </table>
                             <div class="center">{{ $users->links() }}</div>
-                            <!-- Pagination Links -->
 
                         </div>
                     </div>
@@ -64,9 +61,7 @@
 
 @stop
 
-<!-- Add Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
     $(document).ready(function() {
@@ -77,7 +72,6 @@
     });
 </script>
 
-<!-- Invite User Modal -->
 <div class="modal fade" id="inviteModal" tabindex="-1" role="dialog" aria-labelledby="inviteModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">

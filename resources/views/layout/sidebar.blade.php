@@ -94,7 +94,7 @@
 
     <!-- Nav Item - User Task -->
 
-    {{-- @if (!Auth::user()->hasAnyRole()) --}}
+    @if (!Auth::user()->hasAnyRole())
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTaskManagement" aria-expanded="false" aria-controls="collapseTaskManagement">
             <i class="fas fa-fw fa-cog"></i>
@@ -110,7 +110,7 @@
         </div>
     </li>
 
-    {{-- @endif --}}
+    @endif
 
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTask" aria-expanded="false" aria-controls="collapseTask">

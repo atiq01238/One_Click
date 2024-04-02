@@ -17,28 +17,28 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
+
     public function updateStatus(Request $request, $id)
     {
-        // Validate the incoming request data
         $validator = Validator::make($request->all(), [
             'status' => ['required', Rule::in(['todo', 'in_progress', 'done'])],
         ]);
 
-        // Check if the validation fails
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        // Find the task by ID
         $task = Task::findOrFail($id);
         $task->status = $request->input('status');
-
-        // Save the updated status
         $task->save();
 
-        // Redirect with success message
-        return redirect()->back()->with('success', 'Task status updated successfully.');
+        // Count the number of tasks that are done
+        $doneTasksCount = Task::where('status', 'done')->count();
+
+        // Pass the count to the view
+        return redirect()->back()->with('success', 'Task status updated successfully.')->with('doneTasksCount', $doneTasksCount);
     }
+
 
     public function index()
     {
@@ -53,7 +53,6 @@ class TaskController extends Controller
      */
     public function create()
     {
-        // Fetch all users
         $projects = Project::all();
         $users = User::all();
 
@@ -66,7 +65,6 @@ class TaskController extends Controller
 
     public function store(Request $request)
     {
-        // Validate the incoming request data
         $validator = Validator::make($request->all(), [
             'project_id' => 'required|exists:projects,id',
             'task_name' => 'required|string|max:255',
@@ -78,12 +76,9 @@ class TaskController extends Controller
             'attachment' => 'nullable|image|mimes:jpeg,png,gif|max:2048',
         ]);
 
-        // Check if the validation fails
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-
-        // Parse dates using Carbon
         try {
             $startDate = Carbon::createFromFormat('d F Y', $request->input('start_date'))->format('Y-m-d');
             $endDate = Carbon::createFromFormat('d F Y', $request->input('end_date'))->format('Y-m-d');
@@ -93,7 +88,6 @@ class TaskController extends Controller
                 'end_date' => 'Invalid end date format. Please use the format "d F Y".',
             ]);
         }
-        // Create a new Task instance
         $task = new Task();
         $task->project_id = $request->input('project_id');
         $task->task_name = $request->input('task_name');
@@ -104,16 +98,11 @@ class TaskController extends Controller
         $task->status = $request->input('status');
         $task->creator_id = auth()->user()->id;
 
-        // Handle attachment upload
         if ($request->hasFile('attachment')) {
             $attachmentPath = $request->file('attachment')->store('attachments', 'public');
             $task->attachment = $attachmentPath;
         }
-
-        // Save the task
         $task->save();
-
-        // Redirect with success message
         return redirect()->back()->with('success', 'Task created successfully.');
     }
 
@@ -144,7 +133,6 @@ class TaskController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // Validate the incoming request data
         $validator = Validator::make($request->all(), [
             'project_id' => 'required|exists:projects,id',
             'task_name' => 'required|string|max:255',
@@ -156,16 +144,13 @@ class TaskController extends Controller
             'attachment' => 'nullable|image|mimes:jpeg,png,gif|max:2048',
         ]);
 
-        // Check if the validation fails
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        // Parse dates using Carbon
         $startDate = Carbon::createFromFormat('d F Y', $request->input('start_date'))->format('Y-m-d');
         $endDate = Carbon::createFromFormat('d F Y', $request->input('end_date'))->format('Y-m-d');
 
-        // Find the task by ID
         $task = Task::findOrFail($id);
         $task->project_id = $request->input('project_id');
         $task->task_name = $request->input('task_name');
@@ -175,26 +160,18 @@ class TaskController extends Controller
         $task->user_id = $request->input('user_id');
         $task->status = $request->input('status');
 
-        // Only update the attachment if a new file is uploaded
         if ($request->hasFile('attachment')) {
             $validator = Validator::make($request->all(), [
                 'attachment' => 'image|mimes:jpeg,png,gif|max:2048',
             ]);
-
-            // Check if the validation fails
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
             }
-
-            // Handle attachment upload
             $attachmentPath = $request->file('attachment')->store('attachments', 'public');
             $task->attachment = $attachmentPath;
         }
 
-        // Save the task
         $task->save();
-
-        // Redirect with success message
         return redirect()->back()->with('success', 'Task updated successfully.');
     }
 
@@ -202,8 +179,11 @@ class TaskController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $task = Task::findOrFail($id);
+        $task->delete();
+
+        return redirect()->back()->with('success', 'Task deleted successfully.');
     }
 }

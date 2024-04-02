@@ -109,45 +109,38 @@ class ProjectController extends Controller
 
     public function update(Request $request, Project $project)
     {
-        // Validate the incoming request data
         $request->validate([
             'project_name' => 'required|string|max:255',
             'description' => 'required|string',
             'start_date' => 'required|date_format:d F Y',
             'end_date' => 'required|date_format:d F Y',
             'user_id' => 'required|exists:users,id',
-            'attachment' => 'nullable|image|mimes:jpeg,png,gif|max:2048', // Adjust MIME types as needed
+            'attachment' => 'nullable|image|mimes:jpeg,png,gif|max:2048',
         ]);
 
         try {
-            // Format the date for start_date and end_date fields
             $startDate = Carbon::createFromFormat('d F Y', $request->input('start_date'))->format('Y-m-d');
             $endDate = Carbon::createFromFormat('d F Y', $request->input('end_date'))->format('Y-m-d');
         } catch (\Exception $e) {
-            // If the date format is incorrect, return validation error
             throw ValidationException::withMessages([
                 'start_date' => 'Invalid start date format. Please use the format "d F Y".',
                 'end_date' => 'Invalid end date format. Please use the format "d F Y".',
             ]);
         }
 
-        // Manually update project fields
         $project->project_name = $request->input('project_name');
         $project->description = $request->input('description');
         $project->start_date = $startDate;
         $project->end_date = $endDate;
         $project->user_id = $request->input('user_id');
 
-        // Handle file upload if attachment is provided
         if ($request->hasFile('attachment')) {
             $attachmentPath = $request->file('attachment')->store('attachments', 'public'); // Store the attachment file in the public disk
             $project->attachment = $attachmentPath;
         } elseif ($request->filled('attachment')) {
-            // Handle non-file input for attachment (e.g., image URL)
             $project->attachment = $request->input('attachment');
         }
 
-        // Save the updated project
         $project->save();
 
         return redirect()->route('projects.index')->with('success', 'Project updated successfully.');
@@ -159,10 +152,7 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        // Delete the project
         $project->delete();
-
-        // Redirect back with a success message
         return redirect()->back()->with('success', 'Project deleted successfully.');
     }
 }

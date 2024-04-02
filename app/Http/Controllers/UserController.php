@@ -48,25 +48,18 @@ class UserController extends Controller
             'email' => 'required|email|max:255|exists:users,email',
             'role' => 'required|string|exists:roles,name',
         ]);
-
         $user = User::where('email', $request->email)->first();
-
         if (!$user) {
             return redirect()->route('admins.index')->with('error', 'User not found.');
         }
-
         $role = Role::where('name', $request->role)->first();
-
         if (!$role) {
             return redirect()->route('admins.index')->with('error', 'Role not found.');
         }
-
         if ($user->hasRole($role)) {
             return redirect()->route('admins.index')->with('error', 'User already has the role.');
         }
-
         $user->assignRole($role);
-
         return redirect()->route('admins.index')->with('success', 'Role assigned successfully');
     }
 

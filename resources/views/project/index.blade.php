@@ -35,22 +35,29 @@
                                         <tr>
                                             <td>{{ $project->id }}</td>
                                             <td>{{ $project->project_name }}</td>
-                                            <td>{{ $project->description }}</td>
+                                            <td>
+                                                <div style="max-height: 30px; overflow: hidden;">
+                                                    {{ Str::limit($project->description, 30) }}
+                                                </div>
+                                                {{-- @if (strlen($project->description) > 50)
+                                                <button type="button" class="btn btn-link" data-toggle="modal" data-target="#descriptionModal-{{ $project->id }}">View More</button>
+                                                @endif --}}
+
+                                            </td>
                                             <td>{{ $project->start_date }}</td>
                                             <td>{{ $project->end_date }}</td>
                                             <td>{{ $project->user->first_name }} {{ $project->user->last_name }}</td>
 
                                             <td>
                                                 <div class="btn-group d-flex" role="group">
-                                                    <a href="{{ route('projects.edit', $project->id) }}" class="btn btn-primary flex-fill">Edit</a>
+                                                    <a href="{{ route('projects.edit', $project->id) }}" class="btn btn-primary flex-fill" style="height: 38px; margin-right: 5px">Edit</a>
                                                     <form action="{{ route('projects.destroy', $project->id) }}" method="POST" class="flex-fill">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-danger w-100">Delete</button>
                                                     </form>
-                                                    <a href="#" type="button" class="btn btn-info flex-fill" data-toggle="modal" data-target="#backlogModal-{{ $project->id }}">BackLog</a>
+                                                    <a href="#" type="button" class="btn btn-info flex-fill" style="height: 38px; margin-left: 5px" data-toggle="modal" data-target="#backlogModal-{{ $project->id }}">BackLog</a>
                                                 </div>
-
                                             </td>
                                         </tr>
                                     @endforeach
@@ -64,17 +71,6 @@
     </section>
 
 @stop
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    $(document).ready(function() {
-        $(".backlog-btn").click(function(e) {
-            e.preventDefault();
-            var projectId = $(this).data('project-id');
-            $('#backlogModal-' + projectId).modal('show');
-        });
-    });
-</script>
 
 @foreach ($projects as $project)
     <div class="modal fade" id="backlogModal-{{ $project->id }}" role="dialog" aria-labelledby="backModalLabel"
@@ -82,15 +78,31 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="backlogModalLabel">Project Details</h5>
+                    <h5 class="modal-title" id="backlogModalLabel">Project Name: {{ $project->project_name }}</h5>
                     <button type="button" class="btn-close" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <h5>{{ $project->project_name }}</h5>
-                    <p>Description: {{ $project->description }}</p>
-                    <p>Start Date: {{ $project->start_date }}</p>
-                    <p>End Date: {{ $project->end_date }}</p>
-                    {{-- <p>Attachment {{ $project->attachment }}</p> --}}
+                    {{-- <h5>{{ $project->project_name }}</h5> --}}
+                    <div class="form-group">
+                        <label for="user_id">Assign User</label>
+                        <input type="text" class="form-control" id="user_id" name="user_id"
+                            value="{{ $project->user ? $project->user->email : 'No User Assigned' }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea class="form-control" id="description" name="description" readonly>{{ $project->description }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="start_date">Start Date</label>
+                        <input type="date" class="form-control" id="start_date" name="start_date"
+                            value="{{ $project->start_date }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="end_date">End Date</label>
+                        <input type="date" class="form-control" id="end_date" name="end_date"
+                            value="{{ $project->end_date }}" readonly>
+                    </div>
+                    <p>Attachment: </p>
                     @if ($project->attachment)
                         <img src="{{ asset('storage/' . $project->attachment) }}" alt="Project Image" height="100px"
                             width="100px">

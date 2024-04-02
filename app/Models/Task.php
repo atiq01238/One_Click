@@ -18,11 +18,18 @@ class Task extends Model
         'status',
         'attachment',
     ];
-    const STATUS_PENDING = 'tode';
-    const STATUS_IN_PROGRESS = 'in_progress';
-    const STATUS_COMPLETED = 'done';
+
     public function project()
     {
         return $this->belongsTo(Project::class, 'project_id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id'); // Define the relationship with the User model
+    }
+
+    const STATUS_PENDING = 'tode';
+    const STATUS_IN_PROGRESS = 'in_progress';
+    const STATUS_COMPLETED = 'done';
 }

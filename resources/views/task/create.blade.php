@@ -1,5 +1,4 @@
 @extends('layout.master')
-{{-- @include('project.bootstrap') --}}
 @section('content')
     <section class="content">
         <div class="container">
@@ -115,7 +114,6 @@
 @push('scripts')
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
-
 <script>
     $(document).ready(function() {
         $('#start_date, #end_date').datepicker({
