@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Crypt;
 
 
 class TaskController extends Controller
@@ -32,10 +33,8 @@ class TaskController extends Controller
         $task->status = $request->input('status');
         $task->save();
 
-        // Count the number of tasks that are done
         $doneTasksCount = Task::where('status', 'done')->count();
 
-        // Pass the count to the view
         return redirect()->back()->with('success', 'Task status updated successfully.')->with('doneTasksCount', $doneTasksCount);
     }
 
@@ -137,8 +136,8 @@ class TaskController extends Controller
             'project_id' => 'required|exists:projects,id',
             'task_name' => 'required|string|max:255',
             'description' => 'required|string',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
+            'start_date' => 'required|date_format:d F Y',
+            'end_date' => 'required|date_format:d F Y|after_or_equal:start_date',
             'user_id' => 'required|exists:users,id',
             'status' => ['required', Rule::in(['todo', 'in_progress', 'done'])],
             'attachment' => 'nullable|image|mimes:jpeg,png,gif|max:2048',
@@ -148,8 +147,15 @@ class TaskController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $startDate = Carbon::createFromFormat('d F Y', $request->input('start_date'))->format('Y-m-d');
-        $endDate = Carbon::createFromFormat('d F Y', $request->input('end_date'))->format('Y-m-d');
+        try {
+            $startDate = Carbon::createFromFormat('d F Y', $request->input('start_date'))->toDateString();
+            $endDate = Carbon::createFromFormat('d F Y', $request->input('end_date'))->toDateString();
+        } catch (\Exception $e) {
+            throw ValidationException::withMessages([
+                'start_date' => 'Invalid start date format. Please use the format "d F Y".',
+                'end_date' => 'Invalid end date format. Please use the format "d F Y".',
+            ]);
+        }
 
         $task = Task::findOrFail($id);
         $task->project_id = $request->input('project_id');
@@ -161,11 +167,11 @@ class TaskController extends Controller
         $task->status = $request->input('status');
 
         if ($request->hasFile('attachment')) {
-            $validator = Validator::make($request->all(), [
+            $attachmentValidator = Validator::make($request->all(), [
                 'attachment' => 'image|mimes:jpeg,png,gif|max:2048',
             ]);
-            if ($validator->fails()) {
-                return redirect()->back()->withErrors($validator)->withInput();
+            if ($attachmentValidator->fails()) {
+                return redirect()->back()->withErrors($attachmentValidator)->withInput();
             }
             $attachmentPath = $request->file('attachment')->store('attachments', 'public');
             $task->attachment = $attachmentPath;

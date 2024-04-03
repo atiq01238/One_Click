@@ -7,7 +7,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Create Task
+                            <h4>All Tasks
                                 <a href="{{ url('tasks/create') }}" class="btn btn-primary" style="float: right;"
                                     id="assignTaskBtn">Assign Task</a>
                             </h4>

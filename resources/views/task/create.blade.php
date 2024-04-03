@@ -7,7 +7,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Create Project
+                            <h4>Create Task
                                 <a href="{{ url('tasks') }}" class="btn btn-primary" style="float: right;">Back</a>
                             </h4>
                         </div>
