@@ -28,39 +28,34 @@ Route::get('login', [AuthController::class, 'index'])->name('auth.login');
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout']);
 
-//Users Routes
 
-// Route::group(['middleware' => ['auth',]], function () {
+Route::group(['middleware' => ['auth',]], function () {
 
+    //Users Routes
+    Route::resource('users', UserController::class);
+    //Task Route
+    Route::resource('tasks', TaskController::class);
+    //Projects Routes
+    Route::resource('projects', ProjectController::class);
+    //Admin Routes
+    Route::resource('admins', AdminController::class);
+    Route::delete('/admins/{id}', 'AdminController@destroy')->name('admins.destroy');
+    //Roles and Permissions
+    Route::resource('permissions', PermissionController::class);
+    Route::delete('permissions/{id}', 'PermissionController@destroy')->name('permissions.destroy');
+    Route::resource('roles', RoleController::class);
+    Route::delete('roles/{id}', 'RoleController@destroy')->name('roles.destroy');
+    Route::get('roles/{roleid}/give-permissions', [RoleController::class, 'addPermissiontoRole'])->name('addPermissiontoRole');
+    Route::put('roles/{roleid}/give-permissions', [RoleController::class, 'givePermissiontoRole'])->name('givePermissiontoRole');
+    Route::resource('users', UserController::class);
+    Route::delete('users/{id}', 'UserController@destroy')->name('user.destroy');
+    Route::get('/assign-role', [UserController::class, 'assignRoleForm'])->name('user.assignRoleForm');
+    Route::post('/assign-role', [UserController::class, 'assignRole'])->name('user.assignRole');
 
-
-// });
-Route::resource('users', UserController::class);
+});
+//Invite Routes
 Route::resource('invites', InviteController::class);
-
-
-Route::get('/assign-role', [UserController::class, 'assignRoleForm'])->name('user.assignRoleForm');
-Route::post('/assign-role', [UserController::class, 'assignRole'])->name('user.assignRole');
-
-//Admin Routes
-Route::resource('admins', AdminController::class);
-Route::delete('/admins/{id}', 'AdminController@destroy')->name('admins.destroy');
-
-//Projects Routes
-
-Route::resource('projects', ProjectController::class);
-
-
-//Task Route
-Route::resource('tasks', TaskController::class);
+//Task Routes
 Route::put('/tasks/{id}/update-status', [TaskController::class, 'updateStatus'])->name('tasks.updateStatus');
 
-//Roles and Permissions
-Route::resource('permissions', PermissionController::class);
-Route::delete('permissions/{id}', 'PermissionController@destroy')->name('permissions.destroy');
-Route::resource('roles', RoleController::class);
-Route::delete('roles/{id}', 'RoleController@destroy')->name('roles.destroy');
-Route::get('roles/{roleid}/give-permissions', [RoleController::class, 'addPermissiontoRole'])->name('addPermissiontoRole');
-Route::put('roles/{roleid}/give-permissions', [RoleController::class, 'givePermissiontoRole'])->name('givePermissiontoRole');
-Route::resource('users', UserController::class);
-Route::delete('users/{id}', 'UserController@destroy')->name('user.destroy');
+

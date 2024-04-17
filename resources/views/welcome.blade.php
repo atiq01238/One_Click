@@ -107,9 +107,9 @@
                             <div class="card-body">
                                 <ul style="list-style-type: none; padding: 0;">
                                     @foreach ($projects as $project)
-                                        <li style="margin-bottom: 10px;">
+                                        <li style="margin-bottom: 15px;">
                                             <a href="{{ route('projects.show', $project->id) }}"
-                                            style="display: block; background: rgb(190, 188, 188); padding: 8px; color: white; text-decoration: none; cursor: pointer;
+                                            style="display: block; background: rgb(190, 188, 188); padding: 12px; color: white; text-decoration: none; cursor: pointer;
                                                     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); transition: background-color 0.3s, box-shadow 0.3s;"
                                             onmouseover="this.style.backgroundColor='#555'; this.style.boxShadow='0 4px 8px rgba(0, 0, 0, 0.3)';"
                                             onmouseout="this.style.backgroundColor='rgb(190, 188, 188)'; this.style.boxShadow='0 4px 8px rgba(0, 0, 0, 0.1)';">

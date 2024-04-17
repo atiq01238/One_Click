@@ -7,6 +7,7 @@ use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Gate;
 
 class AdminController extends Controller
 {
@@ -17,6 +18,10 @@ class AdminController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         $users = User::whereHas('roles')->get();
@@ -70,6 +75,9 @@ class AdminController extends Controller
      */
     public function destroy(string $userId)
     {
+        if (Gate::denies('admins.destroy')) {
+            return back()->with('error', 'You do not have permission to delete Admins.');
+        }
         $user = User::findOrFail($userId);
 
         $user->roles()->detach();

@@ -6,14 +6,16 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Gate;
+
 
 
 class UserController extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->middleware('permission:users.destroy')->only(['destroy']);
-    // }
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
     public function index()
     {
@@ -102,6 +104,10 @@ class UserController extends Controller
     }
     public function destroy($id)
     {
+        if (Gate::denies('users.destroy')) {
+            return back()->with('error', 'You do not have permission to delete users.');
+        }
+
         $user = User::findOrFail($id);
         $user->delete();
 

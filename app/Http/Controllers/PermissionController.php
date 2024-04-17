@@ -4,12 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Gate;
 
 class PermissionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         $permissions = Permission::get();
@@ -99,6 +104,9 @@ class PermissionController extends Controller
      */
     public function destroy(string $id)
     {
+        if (Gate::denies('permissions.destroy')) {
+            return back()->with('error', 'You do not have permission to delete Permissions.');
+        }
         try {
             $permission = Permission::findOrFail($id);
             $permission->delete();

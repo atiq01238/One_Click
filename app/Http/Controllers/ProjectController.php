@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Gate;
 
 class ProjectController extends Controller
 {
@@ -19,6 +20,10 @@ class ProjectController extends Controller
     //     $this->middleware('permission:create-project')->only(['store']);
     // }
 
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
 
@@ -152,6 +157,9 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
+        if (Gate::denies('projects.destroy')) {
+            return back()->with('error', 'You do not have permission to delete Projects.');
+        }
         $project->delete();
         return redirect()->back()->with('success', 'Project deleted successfully.');
     }

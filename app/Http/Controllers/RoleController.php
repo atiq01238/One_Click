@@ -5,12 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Gate;
 
 class RoleController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         $roles = Role::get();
@@ -96,6 +101,9 @@ class RoleController extends Controller
      */
     public function destroy(string $id)
     {
+        if (Gate::denies('roles.destroy')) {
+            return back()->with('error', 'You do not have permission to delete Roles.');
+        }
         try {
             $role = Role::findOrFail($id);
             $role->delete();
@@ -108,6 +116,9 @@ class RoleController extends Controller
     }
     public function addPermissiontoRole($roleid)
     {
+        if (Gate::denies('add/edit_role_permissions')) {
+            return back()->with('error', 'You do not have permission to Add / Edit Role Permissions .');
+        }
         $permissions = Permission::get();
         $role = Role::findOrFail($roleid);
         return view('role.add-permission', [

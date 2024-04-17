@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Crypt;
+// use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Gate;
 
 
 class TaskController extends Controller
@@ -19,6 +20,10 @@ class TaskController extends Controller
      * Display a listing of the resource.
      */
 
+     public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function updateStatus(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -182,11 +187,11 @@ class TaskController extends Controller
     }
 
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
+        if (Gate::denies('tasks.destroy')) {
+            return back()->with('error', 'You do not have permission to delete Tasks.');
+        }
         $task = Task::findOrFail($id);
         $task->delete();
 
