@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Gate;
+use App\Notifications\ProjectAssignedNotification;
 
 class ProjectController extends Controller
 {
@@ -84,6 +85,8 @@ class ProjectController extends Controller
         }
 
         $project->save();
+        $user = User::find($request->input('user_id'));
+        $user->notify(new ProjectAssignedNotification($project));
 
         return redirect('projects')->with('success', 'Project created successfully');
     }
@@ -103,7 +106,7 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        $users = User::all(); // Fetch all users
+        $users = User::all();
         return view('project.edit', compact('project', 'users'));
     }
 
@@ -147,6 +150,8 @@ class ProjectController extends Controller
         }
 
         $project->save();
+        $user = User::find($request->input('user_id'));
+        $user->notify(new ProjectAssignedNotification($project));
 
         return redirect()->route('projects.index')->with('success', 'Project updated successfully.');
     }

@@ -14,7 +14,7 @@
                 $userCount = App\Models\User::count();
             @endphp
 
-            <div class="col-xl-3 col-md-6 mb-4">
+            <div class="col-xl-3 col-md-6 mb-4" id="user">
                 <div class="card border-left-primary shadow h-100 py-2">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
@@ -30,12 +30,20 @@
                     </div>
                 </div>
             </div>
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script>
+                $(document).ready(function() {
+                    $('#user').click(function() {
+                        window.location.href = "{{ url('users') }}";
+                    });
+                });
+            </script>
 
             @php
                 $projectCount = App\Models\Project::count();
             @endphp
 
-            <div class="col-xl-3 col-md-6 mb-4">
+            <div class="col-xl-3 col-md-6 mb-4" id="project">
                 <div class="card border-left-success shadow h-100 py-2">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
@@ -51,13 +59,20 @@
                     </div>
                 </div>
             </div>
-
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script>
+                $(document).ready(function() {
+                    $('#project').click(function() {
+                        window.location.href = "{{ url('projects') }}";
+                    });
+                });
+            </script>
 
             @php
                 $taskCount = App\Models\Task::count();
             @endphp
 
-            <div class="col-xl-3 col-md-6 mb-4">
+            <div class="col-xl-3 col-md-6 mb-4" id="task">
                 <div class="card border-left-success shadow h-100 py-2">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
@@ -73,11 +88,18 @@
                     </div>
                 </div>
             </div>
-
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script>
+                $(document).ready(function() {
+                    $('#task').click(function() {
+                        window.location.href = "{{ url('tasks') }}";
+                    });
+                });
+            </script>
             @php
                 $doneTasksCount = \App\Models\Task::where('status', 'done')->count();
             @endphp
-            <div class="col-xl-3 col-md-6 mb-4">
+            <div class="col-xl-3 col-md-6 mb-4" id="taskdone">
                 <div class="card border-left-warning shadow h-100 py-2">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
@@ -94,7 +116,14 @@
                 </div>
             </div>
         </div>
-
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('#taskdone').click(function() {
+                    window.location.href = "{{ url('tasks') }}";
+                });
+            });
+        </script>
 
         {{-- @auth --}}
             {{-- @if(auth()->user()->roles->isNotEmpty()) --}}

@@ -18,7 +18,6 @@
                                 <a id="invite" class="btn btn-primary" style="float: right;"> Invite User</a>
                             </h4>
                         </div>
-
                         <div class="card-body">
                             <table class="table table-bordered ">
                                 <thead ">
@@ -50,15 +49,12 @@
                                     </tbody>
                             </table>
                             <div class="center">{{ $users->links() }}</div>
-
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
-
 @stop
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

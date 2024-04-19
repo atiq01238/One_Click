@@ -12,7 +12,7 @@
                                     id="assignTaskBtn">Assign Task</a>
                             </h4>
                         </div>
-                        <div class="container mt-5">
+                        <div>
                             <div class="modal fade" id="assignTaskModal" tabindex="-1" role="dialog"
                                 aria-labelledby="assignTaskModalLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
@@ -77,6 +77,7 @@
                                                                     </form>
                                                                     <h6 class="card-title">Task Name: {{ $task->task_name }}</h6>
                                                                     <p class="card-text">Start Date: {{ $task->start_date }}</p>
+                                                                    {{-- <p class="card-text">{{ calculateHours($task->start_date) }}</p></p> --}}
                                                                     <button type="button" class="btn btn-secondary rounded-pill text-nowrap d-flex justify-content-center align-items-center" style="width: 90px; height: 30px; float: left; pointer-events: none;">In Progress</button>
                                                                     <div class="" style="float: right">
                                                                         <a href="#" type="button" class="btn btn-info" data-toggle="modal"
@@ -91,6 +92,14 @@
                                                     @endforeach
                                                 </div>
                                             </td>
+                                            {{-- @php
+                                            function calculateHours($start_date) {
+                                                $start_timestamp = strtotime($start_date);
+                                                $current_timestamp = time();
+                                                $hours_difference = ($current_timestamp - $start_timestamp) / (60 * 60);
+                                                return round($hours_difference, 2); // Round to 2 decimal places
+                                            }
+                                            @endphp --}}
                                             <td>
                                                 <div style="max-height: 600px; overflow-y: auto; -ms-overflow-style: none; scrollbar-width: none;">
                                                     @foreach ($tasks as $task)
@@ -102,7 +111,7 @@
                                                                         @method('DELETE')
                                                                         <button type="submit" style="border: none; background-color: none"><ion-icon name="close-outline"></ion-icon></button>
                                                                     </form>
-                                                                    <h5 class="card-title">Task Name: {{ $task->task_name }}</h5>
+                                                                    <h6 class="card-title">Task Name: {{ $task->task_name }}</h6>
                                                                     <p></p>
                                                                     <h6 class="card-subtitle mb-2 text-body-secondary">Project Name:
                                                                         {{ $task->project ? $task->project->project_name : 'No Project' }}

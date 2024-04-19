@@ -94,7 +94,7 @@
 
     <!-- Nav Item - User Task -->
 
-    @if (!Auth::user()->hasAnyRole())
+    {{-- @if (!Auth::user()->hasAnyRole()) --}}
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTaskManagement" aria-expanded="false" aria-controls="collapseTaskManagement">
             <i class="fas fa-fw fa-cog"></i>
@@ -110,7 +110,7 @@
         </div>
     </li>
 
-    @endif
+    {{-- @endif --}}
 
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTask" aria-expanded="false" aria-controls="collapseTask">
@@ -121,7 +121,7 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <!-- Place your task-related navigation links here -->
                 {{-- <h6 class="collapse-header">Task Management:</h6> --}}
-                <a class="collapse-item" href="">All Tasks</a>
+                <a class="collapse-item" href="{{ url('usertasks') }}">All Tasks</a>
                 {{-- <a class="collapse-item" href="{{ url('tasks/create') }}">Create Task</a> --}}
             </div>
         </div>

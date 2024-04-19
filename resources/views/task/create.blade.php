@@ -5,13 +5,14 @@
             <div class="row">
                 {{-- <div class="col-md-6"></div> --}}
                 <div class="col-md-12">
+                    @include('validate.message')
                     <div class="card">
                         <div class="card-header">
                             <h4>Create Task
                                 <a href="{{ url('tasks') }}" class="btn btn-primary" style="float: right;">Back</a>
                             </h4>
                         </div>
-                        @include('validate.message')
+
                         <div class="card-body">
                             <form action="{{ route('tasks.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf

@@ -116,9 +116,9 @@ class RoleController extends Controller
     }
     public function addPermissiontoRole($roleid)
     {
-        if (Gate::denies('add/edit_role_permissions')) {
-            return back()->with('error', 'You do not have permission to Add / Edit Role Permissions .');
-        }
+        // if (Gate::denies('add/edit_role_permissions')) {
+        //     return back()->with('error', 'You do not have permission to Add / Edit Role Permissions .');
+        // }
         $permissions = Permission::get();
         $role = Role::findOrFail($roleid);
         return view('role.add-permission', [

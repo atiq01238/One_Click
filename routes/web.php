@@ -9,8 +9,10 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\InviteController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
-use App\Services\FetchUserRoles;
-use Illuminate\Support\Facades\Gate;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserTaskController;
+use App\Http\Controllers\NotificationController;
+// use Illuminate\Support\Facades\Gate;
 
 
 
@@ -35,11 +37,11 @@ Route::group(['middleware' => ['auth',]], function () {
     Route::resource('users', UserController::class);
     //Task Route
     Route::resource('tasks', TaskController::class);
+    Route::put('/tasks/{id}/update-status', [TaskController::class, 'updateStatus'])->name('tasks.updateStatus');
     //Projects Routes
     Route::resource('projects', ProjectController::class);
     //Admin Routes
     Route::resource('admins', AdminController::class);
-    Route::delete('/admins/{id}', 'AdminController@destroy')->name('admins.destroy');
     //Roles and Permissions
     Route::resource('permissions', PermissionController::class);
     Route::delete('permissions/{id}', 'PermissionController@destroy')->name('permissions.destroy');
@@ -55,7 +57,10 @@ Route::group(['middleware' => ['auth',]], function () {
 });
 //Invite Routes
 Route::resource('invites', InviteController::class);
-//Task Routes
-Route::put('/tasks/{id}/update-status', [TaskController::class, 'updateStatus'])->name('tasks.updateStatus');
-
-
+//Profile Route
+Route::resource('profiles', ProfileController::class);
+//UserTask Route
+Route::resource('usertasks', UserTaskController::class);
+Route::put('/usertasks/{id}/update-status', [UserTaskController::class, 'updateStatus'])->name('usertasks.updateStatus');
+//Notifi Route
+Route::get('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
