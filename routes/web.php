@@ -12,6 +12,8 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserTaskController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\SearchController;
+use App\Http\Controllers\ReportController;
 // use Illuminate\Support\Facades\Gate;
 
 
@@ -20,9 +22,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware(['auth'])->group(function () {
+// Route::middleware(['auth'])->group(function () {
     Route::get('/', [AuthController::class, 'dashboard'])->name('dashboard');
-});
+// });
 //Auth Routes
 Route::get('register', [AuthController::class, 'create'])->name('register');
 Route::post('register', [AuthController::class, 'store']);
@@ -31,7 +33,7 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout']);
 
 
-Route::group(['middleware' => ['auth',]], function () {
+// Route::group(['middleware' => ['auth',]], function () {
 
     //Users Routes
     Route::resource('users', UserController::class);
@@ -54,13 +56,20 @@ Route::group(['middleware' => ['auth',]], function () {
     Route::get('/assign-role', [UserController::class, 'assignRoleForm'])->name('user.assignRoleForm');
     Route::post('/assign-role', [UserController::class, 'assignRole'])->name('user.assignRole');
 
-});
+// });
 //Invite Routes
 Route::resource('invites', InviteController::class);
 //Profile Route
 Route::resource('profiles', ProfileController::class);
+Route::post('/profiles/storeOrUpdate', [ProfileController::class, 'storeOrUpdate'])->name('profiles.storeOrUpdate');
 //UserTask Route
 Route::resource('usertasks', UserTaskController::class);
 Route::put('/usertasks/{id}/update-status', [UserTaskController::class, 'updateStatus'])->name('usertasks.updateStatus');
 //Notifi Route
 Route::get('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
+//Search Route
+Route::get('/search', [SearchController::class, 'search'])->name('search');
+//Report Route
+Route::resource('reports', ReportController::class);
+
+

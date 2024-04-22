@@ -19,7 +19,6 @@
                             <table class="table table-bordered ">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
                                         <th>Task Title</th>
                                         <th>Description</th>
                                         <th>Start Date</th>
@@ -30,7 +29,6 @@
                                 <tbody>
                                     @foreach ($tasks as $task)
                                         <tr>
-                                            <td>{{ $task->id }}</td>
                                             <td>{{ $task->task_name }}</td>
                                             <td>
                                                 <div style="max-height: 30px; overflow: hidden;">

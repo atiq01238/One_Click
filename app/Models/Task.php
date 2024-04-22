@@ -26,7 +26,7 @@ class Task extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id'); // Define the relationship with the User model
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     const STATUS_PENDING = 'tode';

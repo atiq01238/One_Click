@@ -119,10 +119,18 @@
         </a>
         <div id="collapseTask" class="collapse" aria-labelledby="headingTask" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <!-- Place your task-related navigation links here -->
-                {{-- <h6 class="collapse-header">Task Management:</h6> --}}
                 <a class="collapse-item" href="{{ url('usertasks') }}">All Tasks</a>
-                {{-- <a class="collapse-item" href="{{ url('tasks/create') }}">Create Task</a> --}}
+            </div>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseApeal" aria-expanded="false" aria-controls="collapseApeal">
+            <i class="fas fa-fw fa-tasks"></i> <!-- Assuming "fa-tasks" represents tasks -->
+            <span>Report</span>
+        </a>
+        <div id="collapseApeal" class="collapse" aria-labelledby="headingApeal" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item" href="{{ url('reports') }}">All Report</a>
             </div>
         </div>
     </li>

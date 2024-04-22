@@ -12,6 +12,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rule;
 // use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Gate;
+use App\Notifications\TaskAssignedNotification;
 
 
 class TaskController extends Controller
@@ -107,6 +108,9 @@ class TaskController extends Controller
             $task->attachment = $attachmentPath;
         }
         $task->save();
+        $user = User::find($request->input('user_id'));
+        $user->notify(new TaskAssignedNotification($task));
+
         return redirect()->back()->with('success', 'Task created successfully.');
     }
 

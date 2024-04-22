@@ -40,6 +40,9 @@
                                     <p>No attachment available</p>
                                 @endif
                             </div>
+                            <div>
+                                    <a href="{{ url('reports/create') }}" class="btn btn-secondary" style="float: left;" id="assignTaskBtn">Report Task</a>
+                            </div>
                             <form id="statusForm" action="{{ route('tasks.updateStatus', $task->id) }}" method="POST" style="float: right">
                                 @csrf
                                 @method('PUT')

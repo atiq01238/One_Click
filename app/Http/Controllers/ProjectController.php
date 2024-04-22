@@ -143,7 +143,7 @@ class ProjectController extends Controller
         $project->user_id = $request->input('user_id');
 
         if ($request->hasFile('attachment')) {
-            $attachmentPath = $request->file('attachment')->store('attachments', 'public'); // Store the attachment file in the public disk
+            $attachmentPath = $request->file('attachment')->store('attachments', 'public');
             $project->attachment = $attachmentPath;
         } elseif ($request->filled('attachment')) {
             $project->attachment = $request->input('attachment');
