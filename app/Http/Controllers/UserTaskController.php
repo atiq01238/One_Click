@@ -16,10 +16,11 @@ class UserTaskController extends Controller
     public function index()
     {
         $user = Auth::user();
-
         $tasks = $user->tasks;
-
-        return view("usertask.index", compact('tasks'));
+        $user = Auth::user();
+        $profile = $user->profile;
+        $image = $profile->image ?? '';
+        return view("usertask.index", compact('tasks','image'));
     }
     /**
      * Show the form for creating a new resource.

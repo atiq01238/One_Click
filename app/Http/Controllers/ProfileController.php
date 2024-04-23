@@ -16,7 +16,8 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         $profile = $user->profile;
-        return view("profile.index", compact("user", "profile"));
+        $image = $profile->image ?? '';
+        return view("profile.index", compact("user", "profile","image"));
     }
 
     /**
@@ -43,10 +44,22 @@ class ProfileController extends Controller
             'image' => 'image|mimes:jpeg,png,jpg,gif|max:8048',
         ]);
 
+        $imageName = '';
+
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('profile_imgs', 'public');
-            $profile->image = $imagePath;
+            // Delete previous image if it exists
+            if ($profile && $profile->image) {
+                $previousImage = public_path('profile_imgs/') . $profile->image;
+                if (file_exists($previousImage)) {
+                    unlink($previousImage);
+                }
+            }
+
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('profile_imgs'), $imageName);
         }
+
+
 
         if ($profile) {
             $profile->update([
@@ -54,6 +67,8 @@ class ProfileController extends Controller
                 'last_name' => $request->last_name,
                 'phone' => $request->phone,
                 'email' => $request->email,
+                'image' => $imageName,
+
 
             ]);
         } else {
@@ -63,6 +78,7 @@ class ProfileController extends Controller
                 'last_name' => $request->last_name,
                 'phone' => $request->phone,
                 'email' => $request->email,
+                'image' => $imageName,
             ]);
         }
 

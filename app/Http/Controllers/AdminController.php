@@ -8,6 +8,7 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -18,11 +19,14 @@ class AdminController extends Controller
     // }
     public function index()
     {
+        $user = Auth::user();
+        $profile = $user->profile;
+        $image = $profile->image ?? '';
         $users = User::whereHas('roles')->get();
 
         $roles = Role::pluck('name', 'id');
 
-        return View::make('admin.index', compact('users', 'roles'));
+        return View::make('admin.index', compact('users', 'roles','image'));
     }
 
     public function destroy(string $userId)

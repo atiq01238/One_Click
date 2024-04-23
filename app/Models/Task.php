@@ -29,6 +29,10 @@ class Task extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    // public function reportedTask()
+    // {
+    //     return $this->hasOne(ReportedTask::class);
+    // }
     const STATUS_PENDING = 'tode';
     const STATUS_IN_PROGRESS = 'in_progress';
     const STATUS_COMPLETED = 'done';

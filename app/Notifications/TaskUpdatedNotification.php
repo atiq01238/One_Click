@@ -7,18 +7,18 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class TaskReportedNotification extends Notification
+class TaskUpdatedNotification extends Notification
 {
     use Queueable;
 
-    protected $report;
+    protected $task;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($report)
+    public function __construct($task)
     {
-        $this->report = $report;
+        $this->task = $task;
     }
 
     /**
@@ -31,18 +31,16 @@ class TaskReportedNotification extends Notification
         return ['mail', 'database'];
     }
 
+
     /**
      * Get the mail representation of the notification.
      */
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('A task has been reported:')
-                    ->line('Project: ' . $this->report->project_name)
-                    ->line('Task: ' . $this->report->task_name)
-                    ->line('Detail: ' . $this->report->detail)
-                    ->action('View Task', url('/tasks/' . $this->report->task_id))
-                    ->line('Thank you for using our application!');
+            ->line('A task has been updated.')
+            ->action('View Task', route('tasks.show', ['task' => $this->task->id]))
+            ->line('Thank you for using our application!');
     }
 
     /**
@@ -53,10 +51,8 @@ class TaskReportedNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-            'project_name' => $this->report->project_name,
-            'task_name' => $this->report->task_name,
-            'detail' => $this->report->detail,
-            'task_id' => $this->report->task_id,
+            'task_id' => $this->task->id,
+            'message' => 'A task has been updated: ' . $this->task->task_name,
         ];
     }
 }

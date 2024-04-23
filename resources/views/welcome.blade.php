@@ -4,10 +4,10 @@
 
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                    class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+            {{-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                    class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> --}}
         </div>
-
+        @can('Dashboard Card')
         <div class="row">
 
             @php
@@ -116,6 +116,8 @@
                 </div>
             </div>
         </div>
+        @endcan
+
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
             $(document).ready(function() {
@@ -126,7 +128,7 @@
         </script>
 
         {{-- @auth --}}
-            {{-- @if(auth()->user()->roles->isNotEmpty()) --}}
+            @if(auth()->user()->roles->isNotEmpty())
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
@@ -151,7 +153,7 @@
                         </div>
                     </div>
                 </div>
-            {{-- @endif --}}
+            @endif
         {{-- @endauth --}}
 
 

@@ -13,7 +13,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserTaskController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SearchController;
-use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ReportedTaskController;
 // use Illuminate\Support\Facades\Gate;
 
 
@@ -22,9 +22,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/', [AuthController::class, 'dashboard'])->name('dashboard');
-// });
+});
 //Auth Routes
 Route::get('register', [AuthController::class, 'create'])->name('register');
 Route::post('register', [AuthController::class, 'store']);
@@ -33,7 +33,7 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout']);
 
 
-// Route::group(['middleware' => ['auth',]], function () {
+Route::group(['middleware' => ['auth',]], function () {
 
     //Users Routes
     Route::resource('users', UserController::class);
@@ -56,7 +56,7 @@ Route::post('logout', [AuthController::class, 'logout']);
     Route::get('/assign-role', [UserController::class, 'assignRoleForm'])->name('user.assignRoleForm');
     Route::post('/assign-role', [UserController::class, 'assignRole'])->name('user.assignRole');
 
-// });
+});
 //Invite Routes
 Route::resource('invites', InviteController::class);
 //Profile Route
@@ -70,6 +70,6 @@ Route::get('/notifications/mark-all-as-read', [NotificationController::class, 'm
 //Search Route
 Route::get('/search', [SearchController::class, 'search'])->name('search');
 //Report Route
-Route::resource('reports', ReportController::class);
+Route::resource('reports', ReportedTaskController::class);
 
 

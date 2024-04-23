@@ -13,6 +13,8 @@ use Illuminate\Validation\Rule;
 // use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Gate;
 use App\Notifications\TaskAssignedNotification;
+use App\Notifications\TaskUpdatedNotification;
+use Illuminate\Support\Facades\Auth;
 
 
 class TaskController extends Controller
@@ -47,10 +49,13 @@ class TaskController extends Controller
 
     public function index()
     {
+        $user = Auth::user();
+        $profile = $user->profile;
+        $image = $profile->image ?? '';
         $tasks = Task::with('project')->get();
         $projects = Project::all();
 
-        return view('task.index', compact('projects', 'tasks'));
+        return view('task.index', compact('projects', 'tasks', 'image'));
     }
 
     /**
@@ -58,10 +63,13 @@ class TaskController extends Controller
      */
     public function create()
     {
+        $user = Auth::user();
+        $profile = $user->profile;
+        $image = $profile->image ?? '';
         $projects = Project::all();
         $users = User::all();
 
-        return view("task.create", compact('users', 'projects'));
+        return view("task.create", compact('users', 'projects','image'));
     }
 
     /**
@@ -78,7 +86,7 @@ class TaskController extends Controller
             'end_date' => 'required|date|after_or_equal:start_date',
             'user_id' => 'required|exists:users,id',
             'status' => ['required', Rule::in(['todo', 'in_progress', 'done'])],
-            'attachment' => 'nullable|image|mimes:jpeg,png,gif|max:2048',
+            'attachment' => 'nullable|image|mimes:jpeg,png,gif|max:8048',
         ]);
 
         if ($validator->fails()) {
@@ -119,9 +127,12 @@ class TaskController extends Controller
      */
     public function show($id)
     {
+        $user = Auth::user();
+        $profile = $user->profile;
+        $image = $profile->image ?? '';
         $task = Task::findOrFail($id);
 
-        return view('task.show', compact('task'));
+        return view('task.show', compact('task','image'));
     }
 
     /**
@@ -129,11 +140,14 @@ class TaskController extends Controller
      */
     public function edit($id)
     {
+        $user = Auth::user();
+        $profile = $user->profile;
+        $image = $profile->image ?? '';
         $task = Task::findOrFail($id);
         $projects = Project::all();
         $users = User::all();
 
-        return view('task.edit', compact('task', 'projects', 'users'));
+        return view('task.edit', compact('task', 'projects', 'users','image'));
     }
 
     /**
@@ -149,7 +163,7 @@ class TaskController extends Controller
             'end_date' => 'required|date_format:d F Y|after_or_equal:start_date',
             'user_id' => 'required|exists:users,id',
             'status' => ['required', Rule::in(['todo', 'in_progress', 'done'])],
-            'attachment' => 'nullable|image|mimes:jpeg,png,gif|max:2048',
+            'attachment' => 'nullable|image|mimes:jpeg,png,gif|max:8048',
         ]);
 
         if ($validator->fails()) {
@@ -187,6 +201,10 @@ class TaskController extends Controller
         }
 
         $task->save();
+
+        $user = User::find($request->input('user_id'));
+        $user->notify(new TaskUpdatedNotification($task));
+
         return redirect()->back()->with('success', 'Task updated successfully.');
     }
 

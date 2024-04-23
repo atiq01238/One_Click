@@ -28,14 +28,16 @@ class ProjectController extends Controller
     public function index()
     {
 
-
+        $user = Auth::user();
+        $profile = $user->profile;
+        $image = $profile->image ?? '';
         if (Auth::user()->can('view-all-projects')) {
             $projects = Project::all();
         } else {
             $projects = Project::where('creator_id', Auth::user()->id)->get();
         }
 
-        return view('project.index', compact('projects'));
+        return view('project.index', compact('projects', 'image'));
     }
 
     /**
@@ -43,8 +45,11 @@ class ProjectController extends Controller
      */
     public function create()
     {
+        $user = Auth::user();
+        $profile = $user->profile;
+        $image = $profile->image ?? '';
         $users = User::all();
-        return view('project.create', compact('users'));
+        return view('project.create', compact('users','image'));
     }
 
     /**
@@ -97,8 +102,11 @@ class ProjectController extends Controller
      */
     public function show($id)
     {
+        $user = Auth::user();
+        $profile = $user->profile;
+        $image = $profile->image ?? '';
         $project = Project::findOrFail($id);
-        return view('project.show', compact('project'));
+        return view('project.show', compact('project','image'));
     }
 
     /**
@@ -106,8 +114,11 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
+        $user = Auth::user();
+        $profile = $user->profile;
+        $image = $profile->image ?? '';
         $users = User::all();
-        return view('project.edit', compact('project', 'users'));
+        return view('project.edit', compact('project', 'users', 'image'));
     }
 
     /**

@@ -41,7 +41,8 @@
                                 @endif
                             </div>
                             <div>
-                                    <a href="{{ url('reports/create') }}" class="btn btn-secondary" style="float: left;" id="assignTaskBtn">Report Task</a>
+                                <a href="{{ route('reports.create', ['task_name' => $task->task_name]) }}" class="btn btn-secondary" style="float: left;" id="assignTaskBtn">Report Task</a>
+                                {{-- <a href="{{ route('reports.create', ['task_name' => $task->task_name, 'project_name' => $project->project_name]) }}" class="btn btn-secondary" style="float: left;" id="assignTaskBtn">Report Task</a> --}}
                             </div>
                             <form id="statusForm" action="{{ route('tasks.updateStatus', $task->id) }}" method="POST" style="float: right">
                                 @csrf

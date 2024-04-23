@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 
 
 
@@ -19,8 +20,11 @@ class UserController extends Controller
 
     public function index()
     {
+        $user = Auth::user();
+        $profile = $user->profile;
+        $image = $profile->image ?? '';
         $users = User::with('roles')->paginate(10);
-        return view('user.index', ['users' => $users]);
+        return view('user.index', ['users' => $users,'image'=> $image]);
     }
 
 
@@ -29,9 +33,13 @@ class UserController extends Controller
      */
     public function create()
     {
+        $user = Auth::user();
+        $profile = $user->profile;
+        $image = $profile->image ?? '';
         $roles = Role::Pluck('name','name')->all();
         return view('user.create', [
-            'roles' => $roles
+            'roles' => $roles,
+            'image'=> $image,
         ]);
     }
 
@@ -85,12 +93,15 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
+        $user = Auth::user();
+        $profile = $user->profile;
+        $image = $profile->image ?? '';
         $user = User::findOrFail($id);
-
         $roles = Role::pluck('name')->all();
         return view('user.edit', [
             'roles' => $roles,
-            'user' => $user
+            'user' => $user,
+            'image' => $image
         ]);
 
     }

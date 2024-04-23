@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 
 class RoleController extends Controller
 {
@@ -18,9 +19,13 @@ class RoleController extends Controller
     }
     public function index()
     {
+        $user = Auth::user();
+        $profile = $user->profile;
+        $image = $profile->image ?? '';
         $roles = Role::get();
         return view('role.index', [
-            'roles' => $roles
+            'roles' => $roles,
+            'image' => $image
         ]);
     }
 
@@ -66,10 +71,14 @@ class RoleController extends Controller
      */
     public function edit(string $id)
     {
+        $user = Auth::user();
+        $profile = $user->profile;
+        $image = $profile->image ?? '';
         $role = Role::findOrFail($id);
 
         return view('role.edit', [
-            'role' => $role
+            'role' => $role,
+            'image'=> $image
         ]);
     }
 
@@ -116,14 +125,18 @@ class RoleController extends Controller
     }
     public function addPermissiontoRole($roleid)
     {
-        // if (Gate::denies('add/edit_role_permissions')) {
-        //     return back()->with('error', 'You do not have permission to Add / Edit Role Permissions .');
-        // }
+        if (Gate::denies('add/edit_role_permissions')) {
+            return back()->with('error', 'You do not have permission to Add / Edit Role Permissions .');
+        }
+        $user = Auth::user();
+        $profile = $user->profile;
+        $image = $profile->image ?? '';
         $permissions = Permission::get();
         $role = Role::findOrFail($roleid);
         return view('role.add-permission', [
             'role' => $role,
-            'permissions' => $permissions
+            'permissions' => $permissions,
+            'image'=> $image
         ]);
 
     }

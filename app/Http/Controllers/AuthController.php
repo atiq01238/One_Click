@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Invite;
 use App\Models\Project;
 use App\Models\Task;
+use App\Models\Profile;
 
 
 class AuthController extends Controller
@@ -27,6 +28,8 @@ class AuthController extends Controller
 
         $projectsQuery = Project::query();
         $tasksQuery = Task::query();
+        $profile = $user->profile;
+        $image = $profile->image ?? '';
 
         $projectsQuery->when($user->can('access-all-assigned-projects'), function ($query) {
             return $query->with('tasks');
@@ -43,7 +46,7 @@ class AuthController extends Controller
         $projects = $projectsQuery->get();
         $tasks = $tasksQuery->get();
 
-        return view('welcome', compact('projects', 'tasks'));
+        return view('welcome', compact('projects', 'tasks', 'image'));
     }
 
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 
 class PermissionController extends Controller
 {
@@ -17,9 +18,13 @@ class PermissionController extends Controller
     }
     public function index()
     {
+        $user = Auth::user();
+        $profile = $user->profile;
+        $image = $profile->image ?? '';
         $permissions = Permission::get();
         return view('permission.index', [
-            'permissions' => $permissions
+            'permissions' => $permissions,
+            'image' => $image
         ]);
     }
 
@@ -28,7 +33,10 @@ class PermissionController extends Controller
      */
     public function create()
     {
-        return view('permission.create');
+        $user = Auth::user();
+        $profile = $user->profile;
+        $image = $profile->image ?? '';
+        return view('permission.create', compact('user', 'image'));
     }
 
     /**
@@ -68,11 +76,14 @@ class PermissionController extends Controller
      */
     public function edit(string $id)
     {
-
+        $user = Auth::user();
+        $profile = $user->profile;
+        $image = $profile->image ?? '';
         $permission = Permission::findOrFail($id);
 
         return view('permission.edit', [
-            'permission' => $permission
+            'permission' => $permission,
+            'image' => $image
         ]);
     /**
      * Update the specified resource in storage.

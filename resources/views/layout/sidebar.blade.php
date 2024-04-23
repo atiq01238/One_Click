@@ -34,7 +34,7 @@
     </div>
 
     <!-- Nav Item - User Management -->
-    {{-- @can('User Management') --}}
+    @can('User Management')
         <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse"
             data-target="#collapseEmployeesUserManagement" aria-expanded="false"
@@ -51,11 +51,11 @@
             </div>
         </div>
     </li>
-    {{-- @endcan --}}
+    @endcan
 
 
     <!-- Nav Item - Permissions and Access Control -->
-    {{-- @can('Permissions and Access Control') --}}
+    @can('Permissions and Access Control')
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePermissions"
                 aria-expanded="false" aria-controls="collapsePermissions">
@@ -71,10 +71,10 @@
                 </div>
             </div>
         </li>
-    {{-- @endcan --}}
+    @endcan
 
     <!-- Nav Item - Project Manager -->
-    {{-- @can('access project management') --}}
+    @can('access project management')
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProjectManagement"
             aria-expanded="false" aria-controls="collapseProjectManagement">
@@ -90,11 +90,11 @@
             </div>
         </div>
     </li>
-    {{-- @endcan --}}
+    @endcan
 
     <!-- Nav Item - User Task -->
 
-    {{-- @if (!Auth::user()->hasAnyRole()) --}}
+    @can('access task management')
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTaskManagement" aria-expanded="false" aria-controls="collapseTaskManagement">
             <i class="fas fa-fw fa-cog"></i>
@@ -109,8 +109,7 @@
             </div>
         </div>
     </li>
-
-    {{-- @endif --}}
+    @endcan
 
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTask" aria-expanded="false" aria-controls="collapseTask">

@@ -64,7 +64,13 @@
                         if ($type === 'App\Notifications\TaskAssignedNotification') {
                             $route = 'tasks.show';
                             $id = $notification->data['task_id'];
-                        } elseif ($type === 'App\Notifications\ProjectNotification') {
+                        }elseif ($type === 'App\Notifications\TaskUpdatedNotification') {
+                            $route = 'tasks.show';
+                            $id = $notification->data['task_id'];
+                        }elseif ($type === 'App\Notifications\ReportedTaskNotification') {
+                            $route = 'reports.index';
+                            $id = $notification->data['reported_task_id'];
+                        }elseif ($type === 'App\Notifications\ProjectNotification') {
                             $route = 'projects.show';
                             $id = $notification->data['project_id'];
                         }
@@ -148,7 +154,7 @@
                 @else
                     <span class="mr-2 d-none d-lg-inline text-gray-600 small">Guest</span>
                 @endif
-                <img class="img-profile rounded-circle" src="{{ asset('img/undraw_profile.svg') }}">
+                <img class="img-profile rounded-circle" src="{{ asset('profile_imgs/' . $image) }}">
             </a>
             <!-- Dropdown - User Information -->
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
