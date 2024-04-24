@@ -41,7 +41,7 @@ class ProfileController extends Controller
             'last_name' => 'required|string|max:255',
             'phone' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:profiles,email,' . ($profile ? $profile->id : 'NULL'),
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:8048',
+            'image' => 'image|file|max:8048',
         ]);
 
         $imageName = '';

@@ -31,9 +31,9 @@ class Project extends Model
         return $this->hasMany(Task::class);
     }
 
-    // public function reportedTasks()
-    // {
-    //     return $this->hasMany(ReportedTask::class, 'creator_id');
-    // }
+    public function reportedTasks()
+    {
+        return $this->hasMany(ReportedTask::class);
+    }
 
 }

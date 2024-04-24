@@ -11,6 +11,7 @@ use App\Mail\UserFakeMail;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Invite;
 use App\Models\Project;
+use App\Models\ReportedTask;
 use App\Models\Task;
 use App\Models\Profile;
 
@@ -26,6 +27,8 @@ class AuthController extends Controller
     {
         $user = auth()->user();
 
+        $task = Task::where("id", $user->id)->first();
+        // dd($report);
         $projectsQuery = Project::query();
         $tasksQuery = Task::query();
         $profile = $user->profile;
@@ -48,9 +51,6 @@ class AuthController extends Controller
 
         return view('welcome', compact('projects', 'tasks', 'image'));
     }
-
-
-
 
 
 
@@ -124,32 +124,5 @@ class AuthController extends Controller
         return redirect('login');
     }
 
-    public function show(string $id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }

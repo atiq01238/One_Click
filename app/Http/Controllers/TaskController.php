@@ -47,16 +47,22 @@ class TaskController extends Controller
     }
 
 
-    public function index()
-    {
-        $user = Auth::user();
-        $profile = $user->profile;
-        $image = $profile->image ?? '';
-        $tasks = Task::with('project')->get();
-        $projects = Project::all();
+   public function index()
+{
+    $user = Auth::user();
+    $profile = $user->profile;
+    $image = $profile->image ?? '';
 
-        return view('task.index', compact('projects', 'tasks', 'image'));
+    if (Auth::user()->can('view-all-projects') && Auth::user()->can('view-all-tasks')) {
+        $projects = Project::all();
+        $tasks = Task::all();
+    } else {
+        $projects = Project::where('creator_id', Auth::user()->id)->get();
+        $tasks = Task::where('creator_id', Auth::user()->id)->get();
     }
+
+    return view('task.index', compact('projects', 'tasks', 'image'));
+}
 
     /**
      * Show the form for creating a new resource.
@@ -86,7 +92,7 @@ class TaskController extends Controller
             'end_date' => 'required|date|after_or_equal:start_date',
             'user_id' => 'required|exists:users,id',
             'status' => ['required', Rule::in(['todo', 'in_progress', 'done'])],
-            'attachment' => 'nullable|image|mimes:jpeg,png,gif|max:8048',
+            'attachment' => 'nullable|image|file|max:8048',
         ]);
 
         if ($validator->fails()) {
@@ -163,7 +169,7 @@ class TaskController extends Controller
             'end_date' => 'required|date_format:d F Y|after_or_equal:start_date',
             'user_id' => 'required|exists:users,id',
             'status' => ['required', Rule::in(['todo', 'in_progress', 'done'])],
-            'attachment' => 'nullable|image|mimes:jpeg,png,gif|max:8048',
+            'attachment' => 'nullable|image|file|max:8048',
         ]);
 
         if ($validator->fails()) {

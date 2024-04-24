@@ -18,7 +18,7 @@ class ReportedTask extends Model
 
     public function project()
     {
-        return $this->belongsTo(Project::class, 'creator_id');
+        return $this->belongsTo(Project::class);
     }
     public function task()
     {

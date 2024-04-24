@@ -63,7 +63,7 @@ class ProjectController extends Controller
             'start_date' => 'required|date',
             'end_date' => 'required|date',
             'user_id' => 'required|exists:users,id',
-            'attachment' => 'nullable|image|mimes:jpeg,png,gif|max:2048',
+            'attachment' => 'nullable|file|max:9048',
         ]);
 
         try {
@@ -134,7 +134,7 @@ class ProjectController extends Controller
             'start_date' => 'required|date_format:d F Y',
             'end_date' => 'required|date_format:d F Y',
             'user_id' => 'required|exists:users,id',
-            'attachment' => 'nullable|image|mimes:jpeg,png,gif|max:2048',
+            'attachment' => 'nullable|image|file|max:9048',
         ]);
 
         try {

@@ -45,67 +45,80 @@
         <!-- Nav Item - Alerts -->
         <!-- Inside the navbar -->
        <!-- Nav Item - Alerts -->
-        <li class="nav-item dropdown no-arrow mx-1">
-            <a class="nav-link dropdown-toggle" id="notificationsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-bell fa-fw"></i>
-                <!-- Counter - Notifications -->
-                <span class="badge badge-danger badge-counter">{{ auth()->user()->unreadNotifications->count() }}</span>
-            </a>
-            <!-- Dropdown - Notifications -->
-            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="notificationsDropdown">
-                <h6 class="dropdown-header">Notifications</h6>
-                @forelse(auth()->user()->unreadNotifications as $notification)
-                    @php
-                        $route = '';
-                        $id = null;
-                        $iconClass = 'fa-file-alt';
-                        $type = $notification->type;
+    <li class="nav-item dropdown no-arrow mx-1">
+        <a class="nav-link dropdown-toggle" id="notificationsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-bell fa-fw"></i>
+            <!-- Counter - Notifications -->
+            <span class="badge badge-danger badge-counter">{{ auth()->user()->unreadNotifications->count() }}</span>
+        </a>
+        <!-- Dropdown - Notifications -->
+        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="notificationsDropdown">
+            <h6 class="dropdown-header">Notifications</h6>
+            @forelse(auth()->user()->unreadNotifications as $notification)
+                @php
+                    $route = '';
+                    $id = null;
+                    $iconClass = 'fa-file-alt';
+                    $type = $notification->type;
 
-                        if ($type === 'App\Notifications\TaskAssignedNotification') {
-                            $route = 'tasks.show';
-                            $id = $notification->data['task_id'];
-                        }elseif ($type === 'App\Notifications\TaskUpdatedNotification') {
-                            $route = 'tasks.show';
-                            $id = $notification->data['task_id'];
-                        }elseif ($type === 'App\Notifications\ReportedTaskNotification') {
-                            $route = 'reports.index';
-                            $id = $notification->data['reported_task_id'];
-                        }elseif ($type === 'App\Notifications\ProjectNotification') {
-                            $route = 'projects.show';
-                            $id = $notification->data['project_id'];
-                        }
-                    @endphp
+                    if ($type === 'App\Notifications\TaskAssignedNotification') {
+                        $route = 'tasks.show';
+                        $id = $notification->data['task_id'];
+                    } elseif ($type === 'App\Notifications\TaskUpdatedNotification') {
+                        $route = 'tasks.show';
+                        $id = $notification->data['task_id'];
+                    } elseif ($type === 'App\Notifications\ReportedTaskNotification') {
+                        // $route = 'report.index';
+                        $id = $notification->data['reported_task_id'];
+                        $iconClass = 'fa-flag';
+                    } elseif ($type === 'App\Notifications\ProjectAssignedNotification') {
+                        $route = 'projects.show';
+                        $id = $notification->data['project_id'];
+                    }
+                @endphp
 
-                    @if ($route && $id)
-                        <a class="dropdown-item d-flex align-items-center" href="{{ route($route, $id) }}">
-                            <div class="mr-3">
-                                <div class="icon-circle bg-primary">
-                                    <i class="fas {{ $iconClass }} text-white"></i>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="small text-gray-500">{{ $notification->created_at->diffForHumans() }}</div>
-                                <span class="font-weight-bold">{{ $notification->data['message'] }}</span>
-                            </div>
-                        </a>
-                    @endif
-                @empty
-                    <a class="dropdown-item d-flex align-items-center">
+                @if ($type === 'App\Notifications\ReportedTaskNotification')
+                    <a class="dropdown-item d-flex align-items-center" href="{{ url('tasks', ['id' => $task->id]) }}">
                         <div class="mr-3">
-                            <div class="icon-circle bg-secondary">
-                                <i class="fas fa-bell text-white"></i>
+                            <div class="icon-circle bg-primary">
+                                <i class="fas {{ $iconClass }} text-white"></i>
                             </div>
                         </div>
                         <div>
-                            <span class="font-weight-bold">No notifications</span>
+                            <div class="small text-gray-500">{{ $notification->created_at->diffForHumans() }}</div>
+                            <span class="font-weight-bold">{{ $notification->data['message'] }}</span>
                         </div>
                     </a>
-                @endforelse
+                @elseif ($route && $id)
+                    <a class="dropdown-item d-flex align-items-center" href="{{ route($route, $id) }}">
+                        <div class="mr-3">
+                            <div class="icon-circle bg-primary">
+                                <i class="fas {{ $iconClass }} text-white"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="small text-gray-500">{{ $notification->created_at->diffForHumans() }}</div>
+                            <span class="font-weight-bold">{{ $notification->data['message'] }}</span>
+                        </div>
+                    </a>
+                @endif
+            @empty
+                <a class="dropdown-item d-flex align-items-center">
+                    <div class="mr-3">
+                        <div class="icon-circle bg-secondary">
+                            <i class="fas fa-bell text-white"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="font-weight-bold">No notifications</span>
+                    </div>
+                </a>
+            @endforelse
 
-                <a class="dropdown-item text-center small text-gray-500" href="{{ route('notifications.markAllAsRead') }}">Mark all as read</a>
-            </div>
+            <a class="dropdown-item text-center small text-gray-500" href="{{ route('notifications.markAllAsRead') }}">Mark all as read</a>
+        </div>
+    </li>
 
-        </li>
 
 
         <!-- Nav Item - Messages -->

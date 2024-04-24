@@ -18,21 +18,21 @@
 
                                 <div class="mb-3">
                                     <label for="project_name">Project Title</label>
-                                    <input type="text" name="project_name" id="project_name" value="{{ $project->project_name ?? old('project_name') }}" class="form-control">
+                                    <input type="text" name="project_name" id="project_name" value="{{ $project->project_name ?? old('project_name') }}" class="form-control" readonly>
                                     @error('project_name')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="mb-3">
                                     <label for="task_name" class="form-label">Task Name</label>
-                                    <input type="text" name="task_name" id="task_name" value="{{ $task->task_name ?? old('task_name') }}" class="form-control">
+                                    <input type="text" name="task_name" id="task_name" value="{{ $task->task_name ?? old('task_name') }}" class="form-control" readonly>
                                     @error('task_name')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="mb-3">
                                     <label for="detail">Detail</label>
-                                    <input type="text" name="detail" id="detail" class="form-control">
+                                    <input type="" name="detail" id="detail" class="form-control">
                                     {{-- <textarea name="" id="" cols="30" rows="30"></textarea> --}}
                                     @error('detail')
                                         <div class="text-danger">{{ $message }}</div>

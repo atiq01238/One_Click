@@ -12,24 +12,32 @@
                     <div class="card-header">
                         <h4>All Reports</h4>
                     </div>
-
+                    @include('validate.message')
                     <div class="card-body">
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    {{-- <th>ID</th> --}}
                                     <th>Project Title</th>
                                     <th>Task Title</th>
                                     <th>Detail</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($reports as $report)
                                 <tr>
-                                    <td>{{ $report->id }}</td>
+                                    {{-- <td>{{ $report->id }}</td> --}}
                                     <td>{{ $report->project_name }}</td>
                                     <td>{{ $report->task_name }}</td>
                                     <td>{{ $report->detail }}</td>
+                                    <td>
+                                        <form action="{{ route('reports.destroy', $report->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                        </form>
+                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>

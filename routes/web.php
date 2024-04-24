@@ -72,4 +72,5 @@ Route::get('/search', [SearchController::class, 'search'])->name('search');
 //Report Route
 Route::resource('reports', ReportedTaskController::class);
 
+// Route::get('tasks/{id}', 'TaskController@show')->name('tasks.show');
 

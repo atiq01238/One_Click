@@ -34,7 +34,10 @@ class RoleController extends Controller
      */
     public function create()
     {
-        return view('role.create');
+        $user = Auth::user();
+        $profile = $user->profile;
+        $image = $profile->image ?? '';
+        return view('role.create', compact('user', 'image'));
     }
 
     /**
