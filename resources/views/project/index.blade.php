@@ -21,7 +21,7 @@
                             <table class="table table-bordered ">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        {{-- <th>ID</th> --}}
                                         <th>Project Title</th>
                                         <th>Description</th>
                                         <th>Start Date</th>
@@ -33,7 +33,7 @@
                                 <tbody>
                                     @foreach ($projects as $project)
                                         <tr>
-                                            <td>{{ $project->id }}</td>
+                                            {{-- <td>{{ $project->id }}</td> --}}
                                             <td>{{ $project->project_name }}</td>
                                             <td>
                                                 <div style="max-height: 30px; overflow: hidden;">

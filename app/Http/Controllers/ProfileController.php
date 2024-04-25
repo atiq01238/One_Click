@@ -6,12 +6,18 @@ use Illuminate\Http\Request;
 use App\Models\Profile;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Auth\Events\Logout;
 
 class ProfileController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         $user = Auth::user();
@@ -87,6 +93,13 @@ class ProfileController extends Controller
             'last_name' => $request->last_name,
             'email' => $request->email,
         ]);
+
+        if ($profile->wasChanged('email')) {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        }
+
 
         return redirect()->back()->with('success', 'Profile updated successfully.');
     }

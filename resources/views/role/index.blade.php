@@ -35,7 +35,7 @@
                             <table class="table table-bordered ">
                                 <thead >
                                     <tr>
-                                        <th style="padding: 10px;">ID</th>
+                                        {{-- <th style="padding: 10px;">ID</th> --}}
                                         <th style="padding: 10px;">Name</th>
                                         <th style="padding: 10px;">Action</th>
                                     </tr>
@@ -43,7 +43,7 @@
                                 <tbody>
                                     @foreach ($roles as $role)
                                         <tr>
-                                            <td style="padding: 10px;">{{ $role->id }}</td>
+                                            {{-- <td style="padding: 10px;">{{ $role->id }}</td> --}}
                                             <td style="padding: 10px;">{{ $role->name }}</td>
                                             <td style="padding: 10px;">
                                                 <a href="{{ url('roles/' . $role->id . '/give-permissions') }}" class="btn btn-success">
@@ -68,8 +68,6 @@
             </div>
         </section>
 
-
-        <!-- /.content -->
     </div>
 
 @stop

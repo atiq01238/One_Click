@@ -22,7 +22,7 @@
                                 <table class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
+                                            {{-- <th>ID</th> --}}
                                             <th>Email</th>
                                             <th>Roles</th>
                                             <th>Action</th>
@@ -31,7 +31,7 @@
                                     <tbody>
                                         @foreach ($users as $user)
                                             <tr>
-                                                <td style="padding: 10px;">{{ $user->id }}</td>
+                                                {{-- <td style="padding: 10px;">{{ $user->id }}</td> --}}
                                                 <td style="padding: 10px;">{{ $user->email }}</td>
                                                 <td>
                                                     @foreach ($user->roles as $role)

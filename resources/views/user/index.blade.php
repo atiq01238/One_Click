@@ -22,7 +22,7 @@
                             <table class="table table-bordered ">
                                 <thead ">
                                         <tr>
-                                            <th style="padding: 10px;">ID</th>
+                                            {{-- <th style="padding: 10px;">ID</th> --}}
                                             <th style="padding: 10px;">First Name</th>
                                             <th style="padding: 10px;">Last Name</th>
                                             <th style="padding: 10px;">Email</th>
@@ -32,7 +32,7 @@
                                     <tbody>
                                          @foreach ($users as $user)
                                     <tr>
-                                        <td style="padding: 10px;">{{ $user->id }}</td>
+                                        {{-- <td style="padding: 10px;">{{ $user->id }}</td> --}}
                                         <td style="padding: 10px;">{{ $user->first_name }}</td>
                                         <td style="padding: 10px;">{{ $user->last_name }}</td>
                                         <td style="padding: 10px;">{{ $user->email }}</td>

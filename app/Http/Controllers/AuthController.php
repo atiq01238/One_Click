@@ -26,7 +26,6 @@ class AuthController extends Controller
     public function dashboard()
     {
         $user = auth()->user();
-
         $task = Task::where("id", $user->id)->first();
         // dd($report);
         $projectsQuery = Project::query();
@@ -45,7 +44,6 @@ class AuthController extends Controller
         }, function ($query) use ($user) {
             return $query->whereIn('id', $user->tasks()->pluck('id'));
         });
-
         $projects = $projectsQuery->get();
         $tasks = $tasksQuery->get();
 

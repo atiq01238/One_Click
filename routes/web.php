@@ -55,20 +55,20 @@ Route::group(['middleware' => ['auth',]], function () {
     Route::delete('users/{id}', 'UserController@destroy')->name('user.destroy');
     Route::get('/assign-role', [UserController::class, 'assignRoleForm'])->name('user.assignRoleForm');
     Route::post('/assign-role', [UserController::class, 'assignRole'])->name('user.assignRole');
+    //Profile Route
+    Route::resource('profiles', ProfileController::class);
+    Route::post('/profiles/storeOrUpdate', [ProfileController::class, 'storeOrUpdate'])->name('profiles.storeOrUpdate');
 
 });
 //Invite Routes
 Route::resource('invites', InviteController::class);
-//Profile Route
-Route::resource('profiles', ProfileController::class);
-Route::post('/profiles/storeOrUpdate', [ProfileController::class, 'storeOrUpdate'])->name('profiles.storeOrUpdate');
 //UserTask Route
 Route::resource('usertasks', UserTaskController::class);
 Route::put('/usertasks/{id}/update-status', [UserTaskController::class, 'updateStatus'])->name('usertasks.updateStatus');
 //Notifi Route
 Route::get('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
 //Search Route
-Route::get('/search', [SearchController::class, 'search'])->name('search');
+Route::get('/search/{route}', [SearchController::class, 'search'])->name('search');
 //Report Route
 Route::resource('reports', ReportedTaskController::class);
 

@@ -86,8 +86,14 @@ class ReportedTaskController extends Controller
     public function destroy($id)
     {
         $report = ReportedTask::findOrFail($id);
-        $report->delete();
 
-        return redirect()->route('reports.index')->with('success', 'Report deleted successfully.');
+        // Check if the authenticated user is the creator of the report
+        if ($report->creator_id == auth()->user()->id) {
+            $report->delete();
+            return redirect()->route('reports.index')->with('success', 'Your report has been deleted successfully.');
+        } else {
+            return redirect()->route('reports.index')->with('error', 'You are not authorized to delete this report.');
+        }
     }
+
 }
